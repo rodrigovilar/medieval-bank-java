@@ -7,8 +7,8 @@ public class BurgosAgency {
 	private static String manager;
 
 
-	public static void setName(String nome) {
-		BurgosAgency.name = nome;
+	public static void setName(String name) {
+		BurgosAgency.name = name;
 	}
 
 	public static String getName() {
