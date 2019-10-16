@@ -7,16 +7,16 @@ public class BurgosAgency {
 	private static String manager;
 
 
-	public static void setName(String string) {
-		BurgosAgency.name = string;
+	public static void setName(String nome) {
+		BurgosAgency.name = nome;
 	}
 
 	public static String getName() {
 		return BurgosAgency.name;
 	}
 
-	public static void setManager(String string) {
-		BurgosAgency.manager = string;
+	public static void setManager(String manager) {
+		BurgosAgency.manager = manager;
 	}
 
 	public static String getManager() {
