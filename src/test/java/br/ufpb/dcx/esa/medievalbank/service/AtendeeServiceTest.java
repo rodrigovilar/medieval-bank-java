@@ -21,42 +21,50 @@ public class AtendeeServiceTest {
 	
 	@Test
 	public void t01_createAtendee() {
-		Atendee atendee = new Atendee();
-		atendee.setName("A name");
-		Atendee createdAtendee = service.create(atendee);
-		
-		assertNotNull(createdAtendee.getId());
-		assertNotNull(createdAtendee.getCreation());
-		assertEquals(atendee.getName(), createdAtendee.getName());
+		String aName = "A name";
+		Atendee createdAtendee = createAtendee(aName);
+				
+		validateCreatedAtendee(aName, createdAtendee);
 
 		Atendee searchedAtendee = service.getOne(createdAtendee.getId());
 		assertEquals(createdAtendee, searchedAtendee);
 	}
-	
-	@Test
-	public void t02_createAtendeeWithoutName() {
-		Atendee atendee = new Atendee();
-		try {
-			service.create(atendee);
-			fail("Accepted atendee without name");
-		} catch (MedievalBankException e) {
-			assertEquals("Name is mandatory", e.getMessage());
-		}
+
+	private void validateCreatedAtendee(String aName, Atendee createdAtendee) {
+		assertNotNull(createdAtendee.getId());
+		assertNotNull(createdAtendee.getCreation());
+		assertEquals(aName, createdAtendee.getName());
 	}
 	
 	@Test
-	public void t03_atendeeNameDuplicated() {
-		Atendee atendee1 = new Atendee();
-		atendee1.setName("A name");
-		service.create(atendee1);
+	public void t02_createAtendeeWithoutName() {
+		String failMessage = "Test failed because the system accepted to create atendee without name";
+		String expectedExceptionMessage = "Name is mandatory";
+		tryCreateAtendeeWithError(null, failMessage, expectedExceptionMessage);
+	}
 
-		Atendee atendee2 = new Atendee();
-		atendee2.setName("A name"); // The same name!
+	@Test
+	public void t03_atendeeNameDuplicated() {
+		String aName = "A name";
+		createAtendee(aName);
+
+		String failMessage = "Test failed because the system accepted to create atendee with duplicated name";
+		String expectedExceptionMessage = "Atendee name cannot be duplicated";
+		tryCreateAtendeeWithError(aName, failMessage, expectedExceptionMessage);
+	}
+
+	private void tryCreateAtendeeWithError(String aName, String failMessage, String expectedExceptionMessage) {
 		try {
-			service.create(atendee2);
-			fail("Accepted atendee with duplicated name");
+			createAtendee(aName);
+			fail(failMessage);
 		} catch (MedievalBankException e) {
-			assertEquals("Atendee name cannot be duplicated", e.getMessage());
+			assertEquals(expectedExceptionMessage, e.getMessage());
 		}
+	}
+	
+	private Atendee createAtendee(String aName) {
+		Atendee atendee1 = new Atendee();
+		atendee1.setName(aName);
+		return service.create(atendee1);
 	}
 }
