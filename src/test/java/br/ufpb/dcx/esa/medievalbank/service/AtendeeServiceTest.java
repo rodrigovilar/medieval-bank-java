@@ -44,5 +44,19 @@ public class AtendeeServiceTest {
 		}
 	}
 	
-	
+	@Test
+	public void t03_atendeeNameDuplicated() {
+		Atendee atendee1 = new Atendee();
+		atendee1.setName("A name");
+		service.create(atendee1);
+
+		Atendee atendee2 = new Atendee();
+		atendee2.setName("A name"); // The same name!
+		try {
+			service.create(atendee2);
+			fail("Accepted atendee with duplicated name");
+		} catch (MedievalBankException e) {
+			assertEquals("Atendee name cannot be duplicated", e.getMessage());
+		}
+	}
 }
