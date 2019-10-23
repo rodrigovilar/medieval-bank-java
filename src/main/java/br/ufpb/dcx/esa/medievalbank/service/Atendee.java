@@ -24,4 +24,14 @@ public class Atendee {
 		return null;
 	}
 
+	public void setId(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setCreation(Date date) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
