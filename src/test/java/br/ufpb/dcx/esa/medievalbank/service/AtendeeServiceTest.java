@@ -17,6 +17,8 @@ public class AtendeeServiceTest {
 	
 	public static final String EXAMPLE_NAME = "A Name";
 
+	private static final String EXAMPLE_EMAIL = "a@a.com";
+
 	@Autowired
 	private AtendeeService service;
 	
@@ -24,7 +26,7 @@ public class AtendeeServiceTest {
 	public void t01_createAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
 				
-		validateCreatedAtendee(EXAMPLE_NAME, createdAtendee);
+		validateAtendee(EXAMPLE_NAME, null, createdAtendee);
 
 		Atendee searchedAtendee = service.getOne(createdAtendee.getId());
 		assertEquals(createdAtendee, searchedAtendee);
@@ -89,4 +91,24 @@ public class AtendeeServiceTest {
 		atendee.setEmail("sdsdfa@gmail");
 		tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 	}
+	
+	@Test
+	public void t06_updateAtendee() {
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
+		
+		String otherName = "Other Name";
+		String otherEmail = "other@email.com";
+
+		createdAtendee.setName(otherName);
+		createdAtendee.setEmail(otherEmail);
+		
+		Atendee updatedAtendee = service.update(createdAtendee);
+		validateAtendee(otherName, otherEmail, updatedAtendee);
+		assertEquals(createdAtendee.getId(), updatedAtendee.getId());
+		assertEquals(createdAtendee.getCreation(), updatedAtendee.getCreation());
+		
+		Atendee searchedAtendee = service.getOne(updatedAtendee.getId());
+		assertEquals(updatedAtendee, searchedAtendee);
+	}
+
 }

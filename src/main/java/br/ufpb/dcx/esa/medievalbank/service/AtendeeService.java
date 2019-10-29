@@ -14,4 +14,9 @@ public class AtendeeService {
 		return null;
 	}
 
+	public Atendee update(Atendee atendee) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

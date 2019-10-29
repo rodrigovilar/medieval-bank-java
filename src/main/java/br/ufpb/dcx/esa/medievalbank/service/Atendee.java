@@ -39,4 +39,9 @@ public class Atendee {
 		
 	}
 
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
