@@ -44,4 +44,9 @@ public class Atendee {
 		return null;
 	}
 
+	public void setSSN(String ssn) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

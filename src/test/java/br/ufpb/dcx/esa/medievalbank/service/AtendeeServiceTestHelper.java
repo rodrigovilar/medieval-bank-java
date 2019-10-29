@@ -24,14 +24,28 @@ public class AtendeeServiceTestHelper {
 		}
 	}
 
+	static void tryUpdateAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage, String expectedExceptionMessage) {
+		try {
+			service.update(atendee);
+			fail(failMessage);
+		} catch (MedievalBankException e) {
+			assertEquals(expectedExceptionMessage, e.getMessage());
+		}
+	}
+
 	static Atendee createAtendee(AtendeeService service, String aName) {
 		return createAtendee(service, aName, null);
 	}
 
 	static Atendee createAtendee(AtendeeService service, String aName, String email) {
+		return createAtendee(service, aName, email, null);
+	}
+
+	static Atendee createAtendee(AtendeeService service, String aName, String email, String ssn) {
 		Atendee atendee1 = new Atendee();
 		atendee1.setName(aName);
 		atendee1.setEmail(email);
+		atendee1.setSSN(ssn);
 		return service.create(atendee1);
 	}
 

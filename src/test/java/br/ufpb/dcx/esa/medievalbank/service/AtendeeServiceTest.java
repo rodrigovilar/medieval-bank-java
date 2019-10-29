@@ -19,6 +19,8 @@ public class AtendeeServiceTest {
 
 	private static final String EXAMPLE_EMAIL = "a@a.com";
 
+	private static final String EXAMPLE_SSN = "623-76-7120";
+
 	@Autowired
 	private AtendeeService service;
 	
@@ -109,6 +111,18 @@ public class AtendeeServiceTest {
 		
 		Atendee searchedAtendee = service.getOne(updatedAtendee.getId());
 		assertEquals(updatedAtendee, searchedAtendee);
+	}
+
+	@Test
+	public void t07_updateAtendeeWithImmutableFields() {
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		
+		createdAtendee.setSSN("670-03-8924");
+		
+		String failMessage = "Test failed because the system accepted to update atendee with a new SSN";
+		String expectedExceptionMessage = "Atendee SSN is immutable";
+
+		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 	}
 
 }
