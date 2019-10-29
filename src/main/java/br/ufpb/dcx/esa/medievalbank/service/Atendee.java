@@ -34,4 +34,9 @@ public class Atendee {
 		
 	}
 
+	public void setEmail(String email) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
