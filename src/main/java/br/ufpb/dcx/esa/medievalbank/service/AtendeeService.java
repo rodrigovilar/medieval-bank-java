@@ -19,4 +19,9 @@ public class AtendeeService {
 		return null;
 	}
 
+	public void delete(Atendee atendee) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

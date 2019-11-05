@@ -32,6 +32,18 @@ public class AtendeeServiceTestHelper {
 			assertEquals(expectedExceptionMessage, e.getMessage());
 		}
 	}
+	
+	static void tryGetOneAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage,
+			String expectedExceptionMessage) {
+		try {
+			service.getOne(atendee.getId());
+			fail(failMessage);
+		} catch (MedievalBankException e) {
+			assertEquals(expectedExceptionMessage, e.getMessage());
+		}
+	}
+
+
 
 	static Atendee createAtendee(AtendeeService service, String aName) {
 		return createAtendee(service, aName, null);

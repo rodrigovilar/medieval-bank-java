@@ -200,7 +200,18 @@ public class AtendeeServiceTest {
 		tryUpdateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 	}
 	
-	
+	@Test
+	public void t13_deleteAtendee() {
+		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
+		
+		service.delete(atendee);
+		
+		String failMessage = "Test failed because the system returned an unknown atendee";
+		String expectedExceptionMessage = "Unknown Atendee id: " + atendee.getId();
+		
+		tryGetOneAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+	}
+
 	
 	
 	
