@@ -18,6 +18,8 @@ public class AtendeeServiceTest {
 	private static final int UNKNOWN_ID = 123456;
 
 	public static final String EXAMPLE_NAME = "A Name";
+	public static final String OTHER_NAME = "Other Name";
+
 
 	private static final String EXAMPLE_EMAIL = "a@a.com";
 
@@ -100,14 +102,13 @@ public class AtendeeServiceTest {
 	public void t06_updateAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		
-		String otherName = "Other Name";
 		String otherEmail = "other@email.com";
 
-		createdAtendee.setName(otherName);
+		createdAtendee.setName(OTHER_NAME);
 		createdAtendee.setEmail(otherEmail);
 		
 		Atendee updatedAtendee = service.update(createdAtendee);
-		validateAtendee(otherName, otherEmail, updatedAtendee);
+		validateAtendee(OTHER_NAME, otherEmail, updatedAtendee);
 		assertEquals(createdAtendee.getId(), updatedAtendee.getId());
 		assertEquals(createdAtendee.getCreation(), updatedAtendee.getCreation());
 		
@@ -154,6 +155,17 @@ public class AtendeeServiceTest {
 		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 	}
 	
+	@Test
+	public void t10_updateAtendeeWithDuplicatedName() {
+		createAtendee(service, EXAMPLE_NAME);
+
+		Atendee atendee2 = createAtendee(service, OTHER_NAME);
+		atendee2.setName(EXAMPLE_NAME); 
+				
+		String failMessage = "Test failed because the system accepted to update atendee with duplicated name";
+		String expectedExceptionMessage = "Atendee name cannot be duplicated";
+		tryUpdateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+	}
 	
 	
 	
