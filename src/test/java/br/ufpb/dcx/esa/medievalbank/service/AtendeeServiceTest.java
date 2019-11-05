@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class AtendeeServiceTest {
 	
+	private static final int UNKNOWN_ID = 123456;
+
 	public static final String EXAMPLE_NAME = "A Name";
 
 	private static final String EXAMPLE_EMAIL = "a@a.com";
@@ -124,5 +126,35 @@ public class AtendeeServiceTest {
 
 		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 	}
+	
+	@Test
+	public void t08_updateAtendeeWithUnknownId() {
+		Atendee atendeeWithUnknownId = new Atendee();
+		atendeeWithUnknownId.setId(UNKNOWN_ID);
+		
+		String failMessage = "Test failed because the system accepted to update atendee with an unknown id";
+		String expectedExceptionMessage = "Atendee id not found: " + UNKNOWN_ID;
+
+		tryUpdateAtendeeWithError(service, atendeeWithUnknownId, failMessage, expectedExceptionMessage);
+
+	
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		createdAtendee.setId(UNKNOWN_ID);
+		
+		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
