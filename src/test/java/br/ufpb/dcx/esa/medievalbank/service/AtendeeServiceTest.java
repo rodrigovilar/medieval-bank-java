@@ -179,7 +179,26 @@ public class AtendeeServiceTest {
 		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 	}
 	
-	
+	@Test
+	public void t12_updateAtendeeWithInvalidEmail() {
+		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
+
+		String failMessage = "Test failed because the system accepted to update atendee with invalid e-mail format";
+		String expectedExceptionMessage = "Atendee e-mail format is invalid";
+		
+		
+		atendee.setEmail("sdsdfa.sds#");
+		tryUpdateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+		
+		atendee.setEmail("sdsdfa@@gmail.com");
+		tryUpdateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+		
+		atendee.setEmail("sdsdfa#gmail.com");
+		tryUpdateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+		
+		atendee.setEmail("sdsdfa@gmail");
+		tryUpdateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+	}
 	
 	
 	
