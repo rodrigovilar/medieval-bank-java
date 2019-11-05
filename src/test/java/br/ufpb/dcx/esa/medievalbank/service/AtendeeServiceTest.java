@@ -212,8 +212,23 @@ public class AtendeeServiceTest {
 		tryGetOneAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 	}
 
-	
-	
+	@Test
+	public void t14_deleteUnknownAtendee() {
+		Atendee atendee = new Atendee();
+		atendee.setId(UNKNOWN_ID);
+		
+		service.delete(atendee);
+		
+		String failMessage = "Test failed because the system accepted to delete atendee with an unknown id";
+		String expectedExceptionMessage = "Atendee id not found: " + UNKNOWN_ID;
+		
+		tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+		
+		failMessage = "Test failed because the system accepted to delete a null atendee";
+		expectedExceptionMessage = "Null atendee";
+		tryDeleteAtendeeWithError(service, null, failMessage, expectedExceptionMessage);
+	}
+
 	
 	
 

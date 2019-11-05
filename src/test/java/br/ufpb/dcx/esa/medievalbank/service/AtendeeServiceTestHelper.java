@@ -43,7 +43,15 @@ public class AtendeeServiceTestHelper {
 		}
 	}
 
-
+	static void tryDeleteAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage,
+			String expectedExceptionMessage) {
+		try {
+			service.delete(atendee);
+			fail(failMessage);
+		} catch (MedievalBankException e) {
+			assertEquals(expectedExceptionMessage, e.getMessage());
+		}
+	}
 
 	static Atendee createAtendee(AtendeeService service, String aName) {
 		return createAtendee(service, aName, null);
