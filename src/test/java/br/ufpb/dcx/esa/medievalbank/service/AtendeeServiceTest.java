@@ -144,7 +144,15 @@ public class AtendeeServiceTest {
 		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 	}
 	
-	
+	@Test
+	public void t09_updateAtendeeWithoutName() {
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		createdAtendee.setName(null);
+				
+		String failMessage = "Test failed because the system accepted to update atendee without name";
+		String expectedExceptionMessage = "Name is mandatory";
+		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+	}
 	
 	
 	
