@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -229,7 +230,19 @@ public class AtendeeServiceTest {
 		tryDeleteAtendeeWithError(service, null, failMessage, expectedExceptionMessage);
 	}
 
-	
+	@Test
+	public void t15_threeAtendees() {
+		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
+		Atendee atendee2 = createAtendee(service, OTHER_NAME);
+		Atendee atendee3 = createAtendee(service, "Third Name");
+		
+		List<Atendee> atendees = service.getAll();
+		assertEquals(3, atendees.size());
+		assertEquals(atendee1, atendees.get(0));
+		assertEquals(atendee2, atendees.get(1));
+		assertEquals(atendee3, atendees.get(2));
+	}
+
 	
 
 }
