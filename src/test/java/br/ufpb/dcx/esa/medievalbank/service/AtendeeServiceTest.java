@@ -243,6 +243,24 @@ public class AtendeeServiceTest {
 		assertEquals(atendee3, atendees.get(2));
 	}
 
-	
+	@Test
+	public void t16_filterAtendees() {
+		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
+		Atendee atendee2 = createAtendee(service, OTHER_NAME);
+		Atendee atendee3 = createAtendee(service, "Third Name");
+		
+		List<Atendee> atendees = service.findByName("Third");
+		assertEquals(1, atendees.size());
+		assertEquals(atendee3, atendees.get(0));
+		
+		atendees = service.findByName("Name");
+		assertEquals(3, atendees.size());
+		assertEquals(atendee1, atendees.get(0));
+		assertEquals(atendee2, atendees.get(1));
+		assertEquals(atendee3, atendees.get(2));
+		
+		atendees = service.findByName("John");
+		assertEquals(0, atendees.size());
+	}
 
 }

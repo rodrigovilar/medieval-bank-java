@@ -31,4 +31,9 @@ public class AtendeeService {
 		return null;
 	}
 
+	public List<Atendee> findByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
