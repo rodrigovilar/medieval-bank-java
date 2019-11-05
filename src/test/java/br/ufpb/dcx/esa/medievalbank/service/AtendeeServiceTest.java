@@ -73,7 +73,7 @@ public class AtendeeServiceTest {
 		atendee2.setCreation(new Date());
 		
 		failMessage = "Test failed because the system accepted to create atendee with creation already set";
-		expectedExceptionMessage = "Atendee creation cannot be set";
+		expectedExceptionMessage = "Atendee creation date cannot be set";
 		tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 	}
 	
@@ -167,7 +167,17 @@ public class AtendeeServiceTest {
 		tryUpdateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
 	}
 	
-	
+	@Test
+	public void t11_updateAtendeeWithAutomaticField() throws Exception {
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
+
+		Thread.sleep(10);
+		createdAtendee.setCreation(new Date());
+		
+		String failMessage = "Test failed because the system accepted to update atendee with changed creation";
+		String expectedExceptionMessage = "Atendee creation date cannot be changed";
+		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+	}
 	
 	
 	
