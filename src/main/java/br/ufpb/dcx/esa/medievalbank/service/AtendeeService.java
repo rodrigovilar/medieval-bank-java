@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
+
 @Service
 public class AtendeeService {
 
@@ -17,7 +19,11 @@ public class AtendeeService {
 	}
 
 	public Atendee update(Atendee atendee) {
-		// TODO Auto-generated method stub
+		
+		if(atendee.getName() == null) {
+			throw new MedievalBankException("Name is mandatory");
+		}
+		
 		return null;
 	}
 
