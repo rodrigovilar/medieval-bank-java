@@ -27,6 +27,7 @@ public class AtendeeService {
 	}
 
 	public Atendee update(Atendee atendee) {
+		
 		final String regex ="^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 		Pattern pattern = Pattern.compile(regex);
 	    java.util.regex.Matcher matcher = pattern.matcher(atendee.getEmail());
@@ -38,8 +39,9 @@ public class AtendeeService {
 			throw new MedievalBankException("Atendee e-mail format is invalid");
 		}
 		
+		repository.save(atendee);
 		
-		return null;
+		return repository.save(atendee);
 
 	}
 

@@ -102,6 +102,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t06_updateAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		
