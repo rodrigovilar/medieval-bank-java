@@ -1,52 +1,65 @@
+
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Atendee {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
+public class Atendee implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue
+	private int id;
+	private String name;
+	private String email;
+	private String ssn;
+	private Date creation;
+	
 	public void setName(String name) {
-		// TODO Auto-generated method stub
-		
+		this.name = name;
 	}
 
 	public Integer getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.id;
 	}
 
 	public Date getCreation() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.creation;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
 	public void setId(int id) {
-		// TODO Auto-generated method stub
-		
+		this.id = id;
 	}
 
 	public void setCreation(Date date) {
-		// TODO Auto-generated method stub
+		this.creation = date;
 		
 	}
 
 	public void setEmail(String email) {
-		// TODO Auto-generated method stub
+		this.email = email;
 		
 	}
 
 	public String getEmail() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.email;
 	}
 
 	public void setSSN(String ssn) {
-		// TODO Auto-generated method stub
+		this.ssn = ssn;
 		
+	}
+	public String getSSN() {
+		return this.ssn;
 	}
 
 }

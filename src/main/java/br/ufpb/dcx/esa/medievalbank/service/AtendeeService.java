@@ -1,24 +1,29 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
-import ch.qos.logback.core.boolex.Matcher;
+import br.ufpb.dcx.esa.medievalbank.dao.AtendeeRepository;
 
 @Service
 public class AtendeeService {
-	 	 
+	@Autowired
+	private AtendeeRepository repository;
+	
 
 	public Atendee create(Atendee atendee) {
-		return null;
+		atendee.setCreation(new Date());
+		return repository.save(atendee);
 	}
 
 	public Atendee getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return repository.getOne(id);
 	}
 
 	public Atendee update(Atendee atendee) {
