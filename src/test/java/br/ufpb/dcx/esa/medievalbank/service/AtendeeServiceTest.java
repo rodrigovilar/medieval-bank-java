@@ -42,6 +42,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t02_createAtendeeWithoutName() {
 		Atendee atendee = new Atendee();
 		String failMessage = "Test failed because the system accepted to create atendee without name";
@@ -50,6 +51,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t03_atendeeNameDuplicated() {
 		createAtendee(service, EXAMPLE_NAME);
 
@@ -62,6 +64,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t04_createAtendeeWithAutomaticFields() {
 		Atendee atendee = new Atendee();
 		atendee.setName(EXAMPLE_NAME); 
@@ -81,6 +84,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t05_createAtendeeWithInvalidEmail() {
 		Atendee atendee = new Atendee();
 		atendee.setName(EXAMPLE_NAME); 
@@ -102,6 +106,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t06_updateAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		
@@ -120,6 +125,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t07_updateAtendeeWithImmutableFields() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 		
@@ -132,6 +138,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t08_updateAtendeeWithUnknownId() {
 		Atendee atendeeWithUnknownId = new Atendee();
 		atendeeWithUnknownId.setId(UNKNOWN_ID);
@@ -149,6 +156,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t09_updateAtendeeWithoutName() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 		createdAtendee.setName(null);
@@ -159,6 +167,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t10_updateAtendeeWithDuplicatedName() {
 		createAtendee(service, EXAMPLE_NAME);
 
@@ -171,6 +180,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t11_updateAtendeeWithAutomaticField() throws Exception {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
 
@@ -183,6 +193,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t12_updateAtendeeWithInvalidEmail() {
 		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 
@@ -204,6 +215,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t13_deleteAtendee() {
 		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		
@@ -216,6 +228,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t14_deleteUnknownAtendee() {
 		Atendee atendee = new Atendee();
 		atendee.setId(UNKNOWN_ID);
@@ -233,6 +246,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t15_threeAtendees() {
 		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		Atendee atendee2 = createAtendee(service, OTHER_NAME);
@@ -246,6 +260,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t16_filterAtendees() {
 		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		Atendee atendee2 = createAtendee(service, OTHER_NAME);

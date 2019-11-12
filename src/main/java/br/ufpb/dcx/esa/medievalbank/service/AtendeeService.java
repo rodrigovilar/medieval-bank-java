@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.dao.AtendeeRepository;
 
 @Service
@@ -13,8 +14,11 @@ public class AtendeeService {
 	@Autowired
 	private AtendeeRepository repository;
 	
-	public Atendee create(Atendee atendee) {
+	public Atendee create(Atendee atendee){
 		atendee.setCreation(new Date());
+		if(atendee.getName() == null) {
+			throw new MedievalBankException("Name is mandatory"); 
+		}
 		return repository.save(atendee);
 	}
 
