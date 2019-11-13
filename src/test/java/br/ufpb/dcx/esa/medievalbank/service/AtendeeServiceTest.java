@@ -80,7 +80,7 @@ public class AtendeeServiceTest {
 		
 		failMessage = "Test failed because the system accepted to create atendee with creation already set";
 		expectedExceptionMessage = "Atendee creation date cannot be set";
-		tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+		tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test

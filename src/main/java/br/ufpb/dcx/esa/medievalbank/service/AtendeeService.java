@@ -15,14 +15,24 @@ public class AtendeeService {
 	private AtendeeRepository repository;
 	
 	public Atendee create(Atendee atendee){
-		atendee.setCreation(new Date());
+		
 		if(atendee.getName() == null) {
 			throw new MedievalBankException("Name is mandatory"); 
 		}
 
 		if (repository.existsByName(atendee.getName())) {
 			throw new MedievalBankException("Atendee name cannot be duplicated");
-		};
+		}
+		Integer id = atendee.getId();// a conversão de um int null para integer gera um inteiro
+		if (id != null && id > 0) {
+			throw new MedievalBankException("Atendee id cannot be set");
+		}
+		if (atendee.getCreation() != null) {
+			throw new MedievalBankException("Atendee creation date cannot be set");
+		}
+		
+		atendee.setCreation(new Date());
+		
 		
 		return repository.save(atendee);
 	}
