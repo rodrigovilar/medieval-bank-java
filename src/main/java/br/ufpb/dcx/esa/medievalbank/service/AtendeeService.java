@@ -2,6 +2,7 @@ package br.ufpb.dcx.esa.medievalbank.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class AtendeeService {
 	@Autowired
 	private AtendeeRepository repository;
 	
+
 	public Atendee create(Atendee atendee){
 		
 		if(atendee.getName() == null) {
@@ -30,7 +32,6 @@ public class AtendeeService {
 		if (atendee.getCreation() != null) {
 			throw new MedievalBankException("Atendee creation date cannot be set");
 		}
-		
 		atendee.setCreation(new Date());
 		
 		
@@ -43,8 +44,22 @@ public class AtendeeService {
 	}
 
 	public Atendee update(Atendee atendee) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		final String regex ="^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+		Pattern pattern = Pattern.compile(regex);
+	    java.util.regex.Matcher matcher = pattern.matcher(atendee.getEmail());
+
+		if(atendee.getName() == null) {
+			throw new MedievalBankException("Name is mandatory");
+		}
+		if(!matcher.matches()) {
+			throw new MedievalBankException("Atendee e-mail format is invalid");
+		}
+		
+		repository.save(atendee);
+		
+		return repository.save(atendee);
+
 	}
 
 	public void delete(Atendee atendee) {
