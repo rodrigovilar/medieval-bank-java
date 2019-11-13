@@ -6,4 +6,6 @@ import br.ufpb.dcx.esa.medievalbank.service.Atendee;
 
 public interface AtendeeRepository extends JpaRepository<Atendee, Integer> {
 	
+	Boolean existsByName(String name);
+	
 }

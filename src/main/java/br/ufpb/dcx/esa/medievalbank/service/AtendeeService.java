@@ -19,6 +19,11 @@ public class AtendeeService {
 		if(atendee.getName() == null) {
 			throw new MedievalBankException("Name is mandatory"); 
 		}
+
+		if (repository.existsByName(atendee.getName())) {
+			throw new MedievalBankException("Atendee name cannot be duplicated");
+		};
+		
 		return repository.save(atendee);
 	}
 
