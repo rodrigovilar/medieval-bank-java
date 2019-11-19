@@ -15,6 +15,12 @@ public class AtendeeService {
 	@Autowired
 	private AtendeeRepository repository;
 	
+	public boolean matchersRegex(String email) {
+		final String regex ="^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+		Pattern pattern = Pattern.compile(regex);
+	    java.util.regex.Matcher matcher = pattern.matcher(email);
+	    return matcher.matches();
+	}
 
 	public Atendee create(Atendee atendee){
 		
@@ -26,15 +32,21 @@ public class AtendeeService {
 			throw new MedievalBankException("Atendee name cannot be duplicated");
 		}
 		Integer id = atendee.getId();// a conversão de um int null para integer gera um inteiro
-		if (id != null && id > 0) {
+		
+		if (id != null && id != 0 ) {
 			throw new MedievalBankException("Atendee id cannot be set");
 		}
 		if (atendee.getCreation() != null) {
 			throw new MedievalBankException("Atendee creation date cannot be set");
 		}
+		if(atendee.getEmail() != null) {
+			if(!matchersRegex(atendee.getEmail())) {
+				throw new MedievalBankException("Atendee e-mail format is invalid");
+			}
+		}
+		
+		
 		atendee.setCreation(new Date());
-		
-		
 		return repository.save(atendee);
 	}
 
@@ -45,14 +57,10 @@ public class AtendeeService {
 
 	public Atendee update(Atendee atendee) {
 		
-		final String regex ="^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-		Pattern pattern = Pattern.compile(regex);
-	    java.util.regex.Matcher matcher = pattern.matcher(atendee.getEmail());
-
 		if(atendee.getName() == null) {
 			throw new MedievalBankException("Name is mandatory");
 		}
-		if(!matcher.matches()) {
+		if(!matchersRegex(atendee.getEmail())) {
 			throw new MedievalBankException("Atendee e-mail format is invalid");
 		}
 		
