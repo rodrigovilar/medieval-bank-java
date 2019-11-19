@@ -1,10 +1,12 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
@@ -14,6 +16,7 @@ import br.ufpb.dcx.esa.medievalbank.dao.AtendeeRepository;
 public class AtendeeService {
 	@Autowired
 	private AtendeeRepository repository;
+	
 	
 	public boolean matchersRegex(String email) {
 		final String regex ="^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
@@ -52,7 +55,13 @@ public class AtendeeService {
 
 	public Atendee getOne(Integer id) {
 		
-		return repository.getOne(id);
+		try {			
+			return repository.getOne(id);
+
+		} catch (JpaObjectRetrievalFailureException e) {
+			throw new MedievalBankException("Unknown Atendee id: " + id);
+		}
+		
 	}
 
 	public Atendee update(Atendee atendee) {
@@ -71,18 +80,25 @@ public class AtendeeService {
 	}
 
 	public void delete(Atendee atendee) {
-		// TODO Auto-generated method stub
+		if(atendee == null) {
+			throw new MedievalBankException("Null atendee"); 
+		}
+		
+		if(repository.existsById(atendee.getId()) == false){
+			throw new MedievalBankException("Atendee id not found: "+atendee.getId());
+		}
+		
+		repository.delete(atendee);
 		
 	}
 
 	public List<Atendee> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return repository.findAll();
 	}
 
 	public List<Atendee> findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByNameContaining(name);
 	}
 
 }
