@@ -64,23 +64,45 @@ public class AtendeeService {
 		
 	}
 
-	public Atendee update(Atendee newAtendee) {
+	public Atendee update(Atendee atendee) {
 		
-		if(newAtendee.getName() == null) {
+		/*if (atendee == null) {
+			throw new MedievalBankException("Atendee id not found: " + atendee.getId());
+		}*/
+		if(atendee.getName() == null) {
+			if(repository.existsById(atendee.getId()) == false){
+				throw new MedievalBankException("Atendee id not found: "+atendee.getId());
+			}
+			
 			throw new MedievalBankException("Name is mandatory");
 		}
-		if(!matchersRegex(newAtendee.getEmail())) {
+		else {
+			if(repository.existsById(atendee.getId()) == false ) {
+				throw new MedievalBankException("Atendee id not found: " + atendee.getId());
+			}
+		}
+		
+
+		if(!matchersRegex(atendee.getEmail())) {
 			throw new MedievalBankException("Atendee e-mail format is invalid");
 		}
-		if (repository.existsByName(newAtendee.getName())) {
-			throw new MedievalBankException("Atendee name cannot be duplicated");
-		}
-		Atendee oldAtendee = getOne(newAtendee.getId());
-		if(!(oldAtendee.getSSN().equals(newAtendee.getSSN()))) throw new MedievalBankException("Atendee SSN is imutable");
+		/*if (repository.existsByName(Atendee.getName())) {
+			throw new MedievalBankException("atendee name cannot be duplicated");
+		}*/
 		
-		repository.save(newAtendee);
+	
+		Atendee Atendee1 = getOne(atendee.getId());
+		if(!(Atendee1.getId().equals(atendee.getId()))) throw new MedievalBankException("Atendee id not found: " + atendee.getId());
+	
+		Atendee Atendee2 = getOne(atendee.getId());
+		if(!(Atendee2.getCreation().equals(atendee.getCreation()))) throw new MedievalBankException("Atendee creation date cannot be changed");
 		
-		return repository.save(newAtendee);
+		Atendee oldAtendee = getOne(atendee.getId());
+		if(!(oldAtendee.getSSN().equals(atendee.getSSN()))) throw new MedievalBankException("Atendee SSN is immutable");
+		
+		repository.save(atendee);
+		
+		return repository.save(atendee);
 
 	}
 
