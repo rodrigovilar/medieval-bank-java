@@ -89,7 +89,25 @@ public class AtendeeService {
 		/*if (repository.existsByName(Atendee.getName())) {
 			throw new MedievalBankException("atendee name cannot be duplicated");
 		}*/
-		
+		Atendee oldAtendee = getOne(atendee.getId());
+		String oldSsn = atendee.getSSN();
+		String newSsn = atendee.getSSN();
+			
+			if (oldSsn == null) {
+				if (newSsn != null) {
+					throw new MedievalBankException("Atendee SSN is immutable");
+				} 
+				
+			} else { //oldSsn != null
+				if (newSsn == null) {
+					throw new MedievalBankException("Atendee SSN is immutable");
+				
+				} else { // oldSsn != null && newSsn != null
+					if(!(oldSsn.equals(newSsn))) {
+						throw new MedievalBankException("Atendee SSN is immutable");
+					}
+				}
+			}
 	
 		Atendee Atendee1 = getOne(atendee.getId());
 		if(!(Atendee1.getId().equals(atendee.getId()))) throw new MedievalBankException("Atendee id not found: " + atendee.getId());
@@ -97,8 +115,8 @@ public class AtendeeService {
 		Atendee Atendee2 = getOne(atendee.getId());
 		if(!(Atendee2.getCreation().equals(atendee.getCreation()))) throw new MedievalBankException("Atendee creation date cannot be changed");
 		
-		Atendee oldAtendee = getOne(atendee.getId());
-		if(!(oldAtendee.getSSN().equals(atendee.getSSN()))) throw new MedievalBankException("Atendee SSN is immutable");
+		Atendee oldAtendeeSSN = getOne(atendee.getId());
+		if(!(oldAtendeeSSN.getSSN().equals(atendee.getSSN()))) throw new MedievalBankException("Atendee SSN is immutable");
 		
 		repository.save(atendee);
 		

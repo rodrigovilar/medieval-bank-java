@@ -21,8 +21,6 @@ public class AtendeeServiceTest {
 
 	public static final String EXAMPLE_NAME = "A Name";
 	public static final String OTHER_NAME = "Other Name";
-	public static final String OTHER_EMAIL = "Other@Email.com";
-	public static final String OTHER_SSN = "876-04-3254";
 
 
 	private static final String EXAMPLE_EMAIL = "a@a.com";
@@ -110,7 +108,7 @@ public class AtendeeServiceTest {
 	@Test
 	@Transactional
 	public void t06_updateAtendee() {
-		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		
 		String otherEmail = "other@email.com";
 
@@ -177,9 +175,9 @@ public class AtendeeServiceTest {
 	@Test
 	@Transactional
 	public void t10_updateAtendeeWithDuplicatedName() {
-		createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		createAtendee(service, EXAMPLE_NAME);
 
-		Atendee atendee2 = createAtendee(service, OTHER_NAME, OTHER_EMAIL, OTHER_SSN);
+		Atendee atendee2 = createAtendee(service, OTHER_NAME);
 		atendee2.setName(EXAMPLE_NAME); 
 				
 		String failMessage = "Test failed because the system accepted to update atendee with duplicated name";
@@ -190,7 +188,7 @@ public class AtendeeServiceTest {
 	@Test
 	@Transactional
 	public void t11_updateAtendeeWithAutomaticField() throws Exception {
-		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
 
 		Atendee newAtendee = new Atendee();
 		newAtendee.setCreation(createdAtendee.getCreation());
@@ -209,7 +207,7 @@ public class AtendeeServiceTest {
 	@Test
 	@Transactional
 	public void t12_updateAtendeeWithInvalidEmail() {
-		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 
 		String failMessage = "Test failed because the system accepted to update atendee with invalid e-mail format";
 		String expectedExceptionMessage = "Atendee e-mail format is invalid";
