@@ -55,18 +55,23 @@ public class AtendeeService {
 		return repository.getOne(id);
 	}
 
-	public Atendee update(Atendee atendee) {
+	public Atendee update(Atendee newAtendee) {
 		
-		if(atendee.getName() == null) {
+		if(newAtendee.getName() == null) {
 			throw new MedievalBankException("Name is mandatory");
 		}
-		if(!matchersRegex(atendee.getEmail())) {
+		if(!matchersRegex(newAtendee.getEmail())) {
 			throw new MedievalBankException("Atendee e-mail format is invalid");
 		}
+		if (repository.existsByName(newAtendee.getName())) {
+			throw new MedievalBankException("Atendee name cannot be duplicated");
+		}
+		Atendee oldAtendee = getOne(newAtendee.getId());
+		if(!(oldAtendee.getSSN().equals(newAtendee.getSSN()))) throw new MedievalBankException("Atendee SSN is imutable");
 		
-		repository.save(atendee);
+		repository.save(newAtendee);
 		
-		return repository.save(atendee);
+		return repository.save(newAtendee);
 
 	}
 
@@ -78,6 +83,7 @@ public class AtendeeService {
 	public List<Atendee> getAll() {
 		// TODO Auto-generated method stub
 		return null;
+		
 	}
 
 	public List<Atendee> findByName(String name) {

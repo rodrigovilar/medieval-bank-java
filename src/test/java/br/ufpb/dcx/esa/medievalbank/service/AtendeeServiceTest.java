@@ -129,12 +129,18 @@ public class AtendeeServiceTest {
 	public void t07_updateAtendeeWithImmutableFields() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 		
-		createdAtendee.setSSN("670-03-8924");
+		Atendee newAtendee = new Atendee();
+		newAtendee.setCreation(createdAtendee.getCreation());
+		newAtendee.setEmail(createdAtendee.getEmail());
+		newAtendee.setId(createdAtendee.getId());
+		newAtendee.setName(createdAtendee.getName());
+		
+		newAtendee.setSSN("670-03-8924");
 		
 		String failMessage = "Test failed because the system accepted to update atendee with a new SSN";
 		String expectedExceptionMessage = "Atendee SSN is immutable";
 
-		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+		tryUpdateAtendeeWithError(service, newAtendee, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
