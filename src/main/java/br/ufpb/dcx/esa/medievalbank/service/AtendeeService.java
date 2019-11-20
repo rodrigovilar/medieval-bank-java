@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
@@ -55,21 +57,22 @@ public class AtendeeService {
 
 	public Atendee getOne(Integer id) {
 		
-		try {			
-			return repository.getOne(id);
+		try {		
+			Atendee atendee = repository.getOne(id);
+			atendee.getId();
+			return atendee;
 
 		} catch (JpaObjectRetrievalFailureException e) {
 			throw new MedievalBankException("Unknown Atendee id: " + id);
+		} catch (EntityNotFoundException e) {
+			throw new MedievalBankException("Atendee id not found: " + id);			
 		}
 		
 	}
 
 	public Atendee update(Atendee atendee) {
 		
-		/*if (atendee == null) {
-			throw new MedievalBankException("Atendee id not found: " + atendee.getId());
-		}*/
-		if(atendee.getName() == null) {
+		/*if(atendee.getName() == null) {
 			if(repository.existsById(atendee.getId()) == false){
 				throw new MedievalBankException("Atendee id not found: "+atendee.getId());
 			}
@@ -80,48 +83,63 @@ public class AtendeeService {
 			if(repository.existsById(atendee.getId()) == false ) {
 				throw new MedievalBankException("Atendee id not found: " + atendee.getId());
 			}
-		}
+		}*/
 		
 
-		if(!matchersRegex(atendee.getEmail())) {
-			throw new MedievalBankException("Atendee e-mail format is invalid");
-		}
+		
 		/*if (repository.existsByName(Atendee.getName())) {
-			throw new MedievalBankException("atendee name cannot be duplicated");
+			throw new MedievalBankException("Atendee name cannot be duplicated");
 		}*/
 		Atendee oldAtendee = getOne(atendee.getId());
-		String oldSsn = atendee.getSSN();
-		String newSsn = atendee.getSSN();
-			
-			if (oldSsn == null) {
-				if (newSsn != null) {
-					throw new MedievalBankException("Atendee SSN is immutable");
-				} 
-				
-			} else { //oldSsn != null
-				if (newSsn == null) {
-					throw new MedievalBankException("Atendee SSN is immutable");
-				
-				} else { // oldSsn != null && newSsn != null
-					if(!(oldSsn.equals(newSsn))) {
-						throw new MedievalBankException("Atendee SSN is immutable");
-					}
+		
+		nullSafeEquals(oldAtendee.getSSN(), atendee.getSSN(), "Atendee SSN is immutable");
+		nullSafeEquals(oldAtendee.getCreation(), atendee.getCreation(), "Atendee creation date cannot be changed");
+	
+		
+		if(atendee.getEmail() != null && !matchersRegex(atendee.getEmail())) {
+			throw new MedievalBankException("Atendee e-mail format is invalid");
+		}
+		
+		boolean exist = repository.existsById(atendee.getId());
+		if(exist) {
+			nullSafeEquals(oldAtendee.getId(), atendee.getId(), "Atendee id not found: "+atendee.getId());
+
+		}else{
+			throw new MedievalBankException("Atendee id not found: "+atendee.getId());
+		}
+		
+		if(atendee.getName() == null) {
+			throw new MedievalBankException("Name is mandatory");
+		
+		} else {
+			if(!(oldAtendee.getName().equals(atendee.getName()))) {
+				if (repository.existsByName(atendee.getName())) {
+					throw new MedievalBankException("Atendee name cannot be duplicated");
 				}
 			}
-	
-		Atendee Atendee1 = getOne(atendee.getId());
-		if(!(Atendee1.getId().equals(atendee.getId()))) throw new MedievalBankException("Atendee id not found: " + atendee.getId());
-	
-		Atendee Atendee2 = getOne(atendee.getId());
-		if(!(Atendee2.getCreation().equals(atendee.getCreation()))) throw new MedievalBankException("Atendee creation date cannot be changed");
-		
-		Atendee oldAtendeeSSN = getOne(atendee.getId());
-		if(!(oldAtendeeSSN.getSSN().equals(atendee.getSSN()))) throw new MedievalBankException("Atendee SSN is immutable");
-		
+		}
 		repository.save(atendee);
 		
 		return repository.save(atendee);
 
+	}
+
+	private void nullSafeEquals(Object obj1, Object obj2, String message) {
+		if (obj1 == null) {
+			if (obj2 != null) {
+				throw new MedievalBankException(message);
+			} 
+			
+		} else { //obj1 != null
+			if (obj2 == null) {
+				throw new MedievalBankException(message);
+			
+			} else { // oldSsn != null && newSsn != null
+				if(!(obj1.equals(obj2))) {
+					throw new MedievalBankException(message);
+				}
+			}
+		}
 	}
 
 	public void delete(Atendee atendee) {

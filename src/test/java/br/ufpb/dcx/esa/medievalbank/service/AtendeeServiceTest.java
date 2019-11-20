@@ -146,19 +146,20 @@ public class AtendeeServiceTest {
 	@Test
 	@Transactional
 	public void t08_updateAtendeeWithUnknownId() {
-		Atendee atendeeWithUnknownId = new Atendee();
-		atendeeWithUnknownId.setId(UNKNOWN_ID);
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		Atendee newAtendee = new Atendee();
+		newAtendee.setCreation(createdAtendee.getCreation());
+		newAtendee.setEmail(createdAtendee.getEmail());
+		newAtendee.setSSN(createdAtendee.getSSN());
+		newAtendee.setName(createdAtendee.getName());
+		//newAtendee.setId(createdAtendee.getId());
+		newAtendee.setId(UNKNOWN_ID);
 		
 		String failMessage = "Test failed because the system accepted to update atendee with an unknown id";
 		String expectedExceptionMessage = "Atendee id not found: " + UNKNOWN_ID;
 
-		tryUpdateAtendeeWithError(service, atendeeWithUnknownId, failMessage, expectedExceptionMessage);
+		tryUpdateAtendeeWithError(service, newAtendee, failMessage, expectedExceptionMessage);
 
-	
-		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-		createdAtendee.setId(UNKNOWN_ID);
-		
-		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
@@ -176,13 +177,17 @@ public class AtendeeServiceTest {
 	@Transactional
 	public void t10_updateAtendeeWithDuplicatedName() {
 		createAtendee(service, EXAMPLE_NAME);
-
+			
 		Atendee atendee2 = createAtendee(service, OTHER_NAME);
-		atendee2.setName(EXAMPLE_NAME); 
-				
+		
+		Atendee newAtendee = new Atendee();
+		newAtendee.setCreation(atendee2.getCreation());
+		newAtendee.setId(atendee2.getId());
+		newAtendee.setName(EXAMPLE_NAME); 
+		
 		String failMessage = "Test failed because the system accepted to update atendee with duplicated name";
 		String expectedExceptionMessage = "Atendee name cannot be duplicated";
-		tryUpdateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+		tryUpdateAtendeeWithError(service, newAtendee, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
