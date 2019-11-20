@@ -239,8 +239,6 @@ public class AtendeeServiceTest {
 		Atendee atendee = new Atendee();
 		atendee.setId(UNKNOWN_ID);
 		
-		service.delete(atendee);
-		
 		String failMessage = "Test failed because the system accepted to delete atendee with an unknown id";
 		String expectedExceptionMessage = "Atendee id not found: " + UNKNOWN_ID;
 		
