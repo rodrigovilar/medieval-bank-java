@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,6 +31,7 @@ public class AtendeeServiceTest {
 	private AtendeeService service;
 	
 	@Test
+	@Transactional
 	public void t01_createAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
 				
@@ -40,6 +42,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t02_createAtendeeWithoutName() {
 		Atendee atendee = new Atendee();
 		String failMessage = "Test failed because the system accepted to create atendee without name";
@@ -48,6 +51,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t03_atendeeNameDuplicated() {
 		createAtendee(service, EXAMPLE_NAME);
 
@@ -60,6 +64,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t04_createAtendeeWithAutomaticFields() {
 		Atendee atendee = new Atendee();
 		atendee.setName(EXAMPLE_NAME); 
@@ -75,10 +80,11 @@ public class AtendeeServiceTest {
 		
 		failMessage = "Test failed because the system accepted to create atendee with creation already set";
 		expectedExceptionMessage = "Atendee creation date cannot be set";
-		tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+		tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
+	@Transactional
 	public void t05_createAtendeeWithInvalidEmail() {
 		Atendee atendee = new Atendee();
 		atendee.setName(EXAMPLE_NAME); 
@@ -100,6 +106,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t06_updateAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		
@@ -118,35 +125,45 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t07_updateAtendeeWithImmutableFields() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 		
-		createdAtendee.setSSN("670-03-8924");
+		Atendee newAtendee = new Atendee();
+		newAtendee.setCreation(createdAtendee.getCreation());
+		newAtendee.setEmail(createdAtendee.getEmail());
+		newAtendee.setId(createdAtendee.getId());
+		newAtendee.setName(createdAtendee.getName());
+		
+		newAtendee.setSSN("670-03-8924");
 		
 		String failMessage = "Test failed because the system accepted to update atendee with a new SSN";
 		String expectedExceptionMessage = "Atendee SSN is immutable";
 
-		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+		tryUpdateAtendeeWithError(service, newAtendee, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
+	@Transactional
 	public void t08_updateAtendeeWithUnknownId() {
-		Atendee atendeeWithUnknownId = new Atendee();
-		atendeeWithUnknownId.setId(UNKNOWN_ID);
+		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+		Atendee newAtendee = new Atendee();
+		newAtendee.setCreation(createdAtendee.getCreation());
+		newAtendee.setEmail(createdAtendee.getEmail());
+		newAtendee.setSSN(createdAtendee.getSSN());
+		newAtendee.setName(createdAtendee.getName());
+		//newAtendee.setId(createdAtendee.getId());
+		newAtendee.setId(UNKNOWN_ID);
 		
 		String failMessage = "Test failed because the system accepted to update atendee with an unknown id";
 		String expectedExceptionMessage = "Atendee id not found: " + UNKNOWN_ID;
 
-		tryUpdateAtendeeWithError(service, atendeeWithUnknownId, failMessage, expectedExceptionMessage);
+		tryUpdateAtendeeWithError(service, newAtendee, failMessage, expectedExceptionMessage);
 
-	
-		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-		createdAtendee.setId(UNKNOWN_ID);
-		
-		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
+	@Transactional
 	public void t09_updateAtendeeWithoutName() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 		createdAtendee.setName(null);
@@ -157,30 +174,43 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t10_updateAtendeeWithDuplicatedName() {
 		createAtendee(service, EXAMPLE_NAME);
-
+			
 		Atendee atendee2 = createAtendee(service, OTHER_NAME);
-		atendee2.setName(EXAMPLE_NAME); 
-				
+		
+		Atendee newAtendee = new Atendee();
+		newAtendee.setCreation(atendee2.getCreation());
+		newAtendee.setId(atendee2.getId());
+		newAtendee.setName(EXAMPLE_NAME); 
+		
 		String failMessage = "Test failed because the system accepted to update atendee with duplicated name";
 		String expectedExceptionMessage = "Atendee name cannot be duplicated";
-		tryUpdateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+		tryUpdateAtendeeWithError(service, newAtendee, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
+	@Transactional
 	public void t11_updateAtendeeWithAutomaticField() throws Exception {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
 
+		Atendee newAtendee = new Atendee();
+		newAtendee.setCreation(createdAtendee.getCreation());
+		newAtendee.setEmail(createdAtendee.getEmail());
+		newAtendee.setId(createdAtendee.getId());
+		newAtendee.setName(createdAtendee.getName());
+		
 		Thread.sleep(10);
-		createdAtendee.setCreation(new Date());
+		newAtendee.setCreation(new Date());
 		
 		String failMessage = "Test failed because the system accepted to update atendee with changed creation";
 		String expectedExceptionMessage = "Atendee creation date cannot be changed";
-		tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+		tryUpdateAtendeeWithError(service, newAtendee, failMessage, expectedExceptionMessage);
 	}
 	
 	@Test
+	@Transactional
 	public void t12_updateAtendeeWithInvalidEmail() {
 		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 
@@ -202,6 +232,7 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
+	@Transactional
 	public void t13_deleteAtendee() {
 		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		
@@ -214,11 +245,10 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t14_deleteUnknownAtendee() {
 		Atendee atendee = new Atendee();
 		atendee.setId(UNKNOWN_ID);
-		
-		service.delete(atendee);
 		
 		String failMessage = "Test failed because the system accepted to delete atendee with an unknown id";
 		String expectedExceptionMessage = "Atendee id not found: " + UNKNOWN_ID;
@@ -231,6 +261,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t15_threeAtendees() {
 		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		Atendee atendee2 = createAtendee(service, OTHER_NAME);
@@ -244,6 +275,7 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
+	@Transactional
 	public void t16_filterAtendees() {
 		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		Atendee atendee2 = createAtendee(service, OTHER_NAME);
