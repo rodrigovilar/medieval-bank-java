@@ -127,7 +127,7 @@ public class AtendeeService {
 			throw new MedievalBankException("Null atendee"); 
 		}
 		
-		if(repository.existsById(atendee.getId())){
+		if(!(repository.existsById(atendee.getId()))){
 			throw new MedievalBankException("Atendee id not found: "+atendee.getId());
 		}
 		
