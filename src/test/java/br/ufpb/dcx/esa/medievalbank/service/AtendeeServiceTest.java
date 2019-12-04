@@ -235,7 +235,6 @@ public class AtendeeServiceTest {
 	@Transactional
 	public void t13_deleteAtendee() {
 		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
-		System.out.println("ID do Atendee: "+atendee.getId());
 		service.delete(atendee);
 		
 		String failMessage = "Test failed because the system returned an unknown atendee";
