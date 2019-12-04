@@ -50,6 +50,18 @@ public class BurgosAgencyTest {
 		
 
 	}
+	@Test
+	@Transactional
+	public void agencyStatusWithThreeAtendees() {
+		createAtendee(atendeeService, "A1");
+		createAtendee(atendeeService, "A2");
+		createAtendee(atendeeService, "A3");
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: [A1, A2, A3]\n" + 
+				"Queue: []", result);
+		
+
+	}
 	
 
 }
