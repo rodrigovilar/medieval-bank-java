@@ -62,6 +62,20 @@ public class BurgosAgencyTest {
 		
 
 	}
+
+	@Test
+	@Transactional
+	public void agencyStatusAfterRemovingAnAtendee() {
+		Atendee a1 = createAtendee(atendeeService, "A1");
+		Atendee a2 = createAtendee(atendeeService, "A2");
+		Atendee a3 = createAtendee(atendeeService, "A3");
+		atendeeService.delete(atendeeService.getOne(a2.getId()));
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: [A1, A3]\n" + 
+				"Queue: []", result);
+		
+
+	}
 	
 
 }
