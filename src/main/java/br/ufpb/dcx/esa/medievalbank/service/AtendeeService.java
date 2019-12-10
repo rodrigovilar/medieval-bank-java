@@ -17,9 +17,9 @@ import br.ufpb.dcx.esa.medievalbank.repository.AtendeeRepository;
 
 @Service
 public class AtendeeService {
+	
 	@Autowired
 	private AtendeeRepository repository;
-	
 	
 	public boolean matchersRegex(String email) {
 		final String regex ="^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
@@ -40,12 +40,9 @@ public class AtendeeService {
 		if (atendee.getCreation() != null) throw new MedievalBankException("Atendee creation date cannot be set");
 		validateEmail(atendee);
 		
-		
 		atendee.setCreation(new Date());
 		return repository.save(atendee);
 	}
-
-
 
 	public Atendee update(Atendee atendee) {
 		
