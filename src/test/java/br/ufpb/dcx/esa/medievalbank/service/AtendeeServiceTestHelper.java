@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
+import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 
 public class AtendeeServiceTestHelper {
 

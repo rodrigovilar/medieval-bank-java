@@ -12,7 +12,8 @@ import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
-import br.ufpb.dcx.esa.medievalbank.dao.AtendeeRepository;
+import br.ufpb.dcx.esa.medievalbank.model.Atendee;
+import br.ufpb.dcx.esa.medievalbank.repository.AtendeeRepository;
 
 @Service
 public class AtendeeService {
