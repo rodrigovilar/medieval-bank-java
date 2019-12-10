@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Demand implements Serializable{
+public class Demand implements Serializable {
 
 	/**
 	 * 

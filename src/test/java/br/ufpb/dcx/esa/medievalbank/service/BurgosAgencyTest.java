@@ -69,7 +69,7 @@ public class BurgosAgencyTest {
 	@Test
 	@Transactional
 	public void agencyStatusWithOneDemand() {
-		createAtendee(atendeeService, "A1");
+		
 		
 	}
 	

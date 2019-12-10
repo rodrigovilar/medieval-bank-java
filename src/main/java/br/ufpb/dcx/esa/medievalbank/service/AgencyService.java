@@ -14,19 +14,18 @@ public class AgencyService {
 	private String name;
 	private String manager;
 	private int tick;
-	private List<Demand> listOfTheDemands = new ArrayList<Demand>();
 	
 	@Autowired
 	private AtendeeService atendeeService;
 	
+	@Autowired
+	private DemandService demandService;
+
 	public void increaseTick() {
 		this.tick++;
 	}
 	public int getTick() {
 		return this.tick;
-	}
-	public void addDemand(Demand demand) {
-		this.listOfTheDemands.add(demand);
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -45,8 +44,9 @@ public class AgencyService {
 	}
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
+		List<Demand> listOfTheDemands = demandService.getAll();
 		
 		return "Atendees: "+ listOfTheAteendes+"\n" + 
-		"Queue: []";
+		"Queue: "+ listOfTheDemands;
 	}
 }
