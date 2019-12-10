@@ -1,20 +1,33 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
+import br.ufpb.dcx.esa.medievalbank.model.Demand;
 
 @Service
 public class AgencyService {
 	private String name;
 	private String manager;
+	private int tick;
+	private List<Demand> listOfTheDemands = new ArrayList<Demand>();
 	
 	@Autowired
 	private AtendeeService atendeeService;
-
+	
+	public void increaseTick() {
+		this.tick++;
+	}
+	public int getTick() {
+		return this.tick;
+	}
+	public void addDemand(Demand demand) {
+		this.listOfTheDemands.add(demand);
+	}
 	public void setName(String name) {
 		this.name = name;
 	}

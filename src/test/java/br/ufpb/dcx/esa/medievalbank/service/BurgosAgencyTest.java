@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.ufpb.dcx.esa.medievalbank.model.Demand;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BurgosAgencyTest {
@@ -68,6 +70,19 @@ public class BurgosAgencyTest {
 	@Transactional
 	public void agencyStatusWithOneDemand() {
 		createAtendee(atendeeService, "A1");
+		
+	}
+	
+	@Test
+	@Transactional
+	public void agencyStatusWithTickAndQueue() {
+		Demand d1 = new Demand();
+		Demand d2 = new Demand();
+		Demand d3 = new Demand();
+		agencyService.addDemand(d1);
+		agencyService.addDemand(d2);
+		agencyService.addDemand(d3);
+		
 		
 	}
 	
