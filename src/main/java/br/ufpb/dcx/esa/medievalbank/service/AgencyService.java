@@ -37,7 +37,6 @@ public class AgencyService {
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAll();
-		
 		return "Atendees: "+ listOfTheAteendes+"\n" + 
 		"Queue: "+ listOfTheDemands;
 	}

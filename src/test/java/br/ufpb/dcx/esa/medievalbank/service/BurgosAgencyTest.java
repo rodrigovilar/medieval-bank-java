@@ -2,7 +2,7 @@ package br.ufpb.dcx.esa.medievalbank.service;
 
 import static org.junit.Assert.assertEquals;
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
-
+import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +20,9 @@ public class BurgosAgencyTest {
 	
 	@Autowired
 	private AtendeeService atendeeService;
+	
+	@Autowired
+	private DemandService demandService;
 
 	@Test
 	public void initialConfiguration() {
@@ -67,9 +70,11 @@ public class BurgosAgencyTest {
 	@Test
 	@Transactional
 	public void agencyStatusWithOneDemand() {
-		
+		createDemand(demandService, "D1");
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + 
+				"Queue: [D1]", result);
 		
 	}
-	
 
 }
