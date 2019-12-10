@@ -1,10 +1,10 @@
-package br.ufpb.dcx.esa.medievalbank.dao;
+package br.ufpb.dcx.esa.medievalbank.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.ufpb.dcx.esa.medievalbank.service.Atendee;
+import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 
 public interface AtendeeRepository extends JpaRepository<Atendee, Integer> {
 	

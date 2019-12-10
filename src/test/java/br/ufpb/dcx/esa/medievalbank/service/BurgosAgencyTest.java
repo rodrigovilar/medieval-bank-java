@@ -39,6 +39,7 @@ public class BurgosAgencyTest {
 				"Queue: []", result);
 
 	}
+	
 	@Test
 	@Transactional
 	public void agencyStatusWithOneAtendee() {
@@ -50,6 +51,7 @@ public class BurgosAgencyTest {
 		
 
 	}
+	
 	@Test
 	@Transactional
 	public void agencyStatusWithThreeAtendees() {
@@ -60,7 +62,13 @@ public class BurgosAgencyTest {
 		assertEquals("Atendees: [A1, A2, A3]\n" + 
 				"Queue: []", result);
 		
-
+	}
+	
+	@Test
+	@Transactional
+	public void agencyStatusWithOneDemand() {
+		createAtendee(atendeeService, "A1");
+		
 	}
 	
 

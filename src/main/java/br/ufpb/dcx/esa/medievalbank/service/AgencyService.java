@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.ufpb.dcx.esa.medievalbank.model.Atendee;
+
 @Service
 public class AgencyService {
 	private String name;
