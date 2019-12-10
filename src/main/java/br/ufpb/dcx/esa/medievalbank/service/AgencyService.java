@@ -11,7 +11,8 @@ import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 public class AgencyService {
 	private String name;
 	private String manager;
-	
+	private int tick;
+
 	@Autowired
 	private AtendeeService atendeeService;
 
@@ -30,10 +31,18 @@ public class AgencyService {
 	public String getManager() {
 		return this.manager;
 	}
+
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
-		
-		return "Atendees: "+ listOfTheAteendes+"\n" + 
-		"Queue: []";
+
+		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: []";
+	}
+
+	public int getTick() {
+		return this.tick;
+	}
+
+	public void increaseTick() {
+		this.tick++;
 	}
 }

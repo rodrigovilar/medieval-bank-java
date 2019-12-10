@@ -73,4 +73,25 @@ public class BurgosAgencyTest {
 
 	}
 
+	@Test
+	@Transactional
+	public void agencyStatusWithTick() {
+
+		int tick = agencyService.getTick();
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + "Queue: []", result);
+		assertEquals(0, tick);
+
+		agencyService.increaseTick();
+		tick = agencyService.getTick();
+		assertEquals("Atendees: []\n" + "Queue: []", result);
+		assertEquals(1, tick);
+
+		agencyService.increaseTick();
+		tick = agencyService.getTick();
+		assertEquals("Atendees: []\n" + "Queue: []", result);
+		assertEquals(2, tick);
+
+	}
+
 }
