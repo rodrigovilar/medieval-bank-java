@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.ufpb.dcx.esa.medievalbank.model.Atendee;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BurgosAgencyTest {
@@ -70,5 +72,18 @@ public class BurgosAgencyTest {
 		assertEquals("Atendees: [A1, A3]\n" + "Queue: []", result);
 
 	}
+
+	// @Test
+	// @Transactional
+	// public void agencyStatusWithTick_QueueAndAtendee() {
+	// createAtendee(atendeeService, "A1");
+	// agencyService.d
+	// Atendee a2 = createAtendee(atendeeService, "A2");
+	// createAtendee(atendeeService, "A3");
+	// atendeeService.delete(atendeeService.getOne(a2.getId()));
+	// String result = agencyService.getStatus();
+	// assertEquals("Atendees: [A1, A3]\n" + "Queue: []", result);
+
+	// }
 
 }

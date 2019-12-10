@@ -1,5 +1,5 @@
 
-package br.ufpb.dcx.esa.medievalbank.service;
+package br.ufpb.dcx.esa.medievalbank.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +12,7 @@ import javax.persistence.Id;
 public class Atendee implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue
 	private int id;
