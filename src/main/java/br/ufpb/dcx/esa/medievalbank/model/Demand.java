@@ -19,6 +19,12 @@ public class Demand implements Serializable {
 	private int id;
 	private String name;	
 	
+	public Demand() {
+	
+	}
+	public Demand(String name) {
+		this.name = name;
+	}
 	public int getId() {
 		return id;
 	}

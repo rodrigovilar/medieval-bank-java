@@ -21,6 +21,12 @@ public class AgencyService {
 	@Autowired
 	private DemandService demandService;
 
+	public DemandService getDemandService() {
+		return demandService;
+	}
+	public void setDemandService(DemandService demandService) {
+		this.demandService = demandService;
+	}
 	public void increaseTick() {
 		this.tick++;
 	}
@@ -44,9 +50,11 @@ public class AgencyService {
 	}
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
+		System.out.println(listOfTheAteendes);
 		List<Demand> listOfTheDemands = demandService.getAll();
+		System.out.println(listOfTheDemands);
 		
 		return "Atendees: "+ listOfTheAteendes+"\n" + 
-		"Queue: "+ listOfTheDemands;
+		"Queue: "+ listOfTheDemands+"\n"+"Tick must return: "+this.tick;
 	}
 }

@@ -76,13 +76,28 @@ public class BurgosAgencyTest {
 	@Test
 	@Transactional
 	public void agencyStatusWithTickAndQueue() {
-		Demand d1 = new Demand();
-		Demand d2 = new Demand();
-		Demand d3 = new Demand();
-		agencyService.addDemand(d1);
-		agencyService.addDemand(d2);
-		agencyService.addDemand(d3);
+		Demand d1 = new Demand("D1");
+		Demand d2 = new Demand("D2");
+		Demand d3 = new Demand("D3");
+
+		agencyService.getDemandService().create(d1);
+		agencyService.getDemandService().create(d2);
+		agencyService.getDemandService().create(d3);
 		
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + 
+				"Queue: [D1,D2,D3]\n" + 
+				"Tick must return: 0", result);
+		result = agencyService.getStatus();
+		
+		assertEquals("Atendees: []\n" + 
+				"Queue: [D1,D2,D3]\n" + 
+				"Tick must return: 1", result);
+		
+		result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + 
+				"Queue: [D1,D2,D3]\n" + 
+				"Tick must return: 2", result);
 		
 	}
 	
