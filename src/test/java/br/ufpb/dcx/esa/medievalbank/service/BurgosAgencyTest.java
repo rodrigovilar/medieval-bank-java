@@ -67,7 +67,7 @@ public class BurgosAgencyTest {
 		createAtendee(atendeeService, "A3");
 		atendeeService.delete(atendeeService.getOne(a2.getId()));
 		String result = agencyService.getStatus();
-		assertEquals("Atendees: [A1 --->>> A3]\n" + "Queue: []", result);
+		assertEquals("Atendees: [A1, A3]\n" + "Queue: []", result);
 
 	}
 
