@@ -49,9 +49,7 @@ public class AgencyService {
 	}
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
-		System.out.println(listOfTheAteendes);
 		List<Demand> listOfTheDemands = demandService.getAll();
-		System.out.println(listOfTheDemands);
 		
 		return "Atendees: "+ listOfTheAteendes+"\n" + 
 		"Queue: "+ listOfTheDemands+"\n"+"Tick must return: "+this.getTick();
