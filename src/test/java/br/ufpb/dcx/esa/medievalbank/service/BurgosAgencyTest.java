@@ -3,6 +3,8 @@ package br.ufpb.dcx.esa.medievalbank.service;
 import static org.junit.Assert.assertEquals;
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 
+import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
+
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,44 +18,44 @@ import br.ufpb.dcx.esa.medievalbank.model.Demand;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BurgosAgencyTest {
-	
+
 	@Autowired
 	private AgencyService agencyService;
-	
+
 	@Autowired
 	private AtendeeService atendeeService;
+	
+	@Autowired
+	private DemandService demandService;
 
 	@Test
 	public void initialConfiguration() {
 
 		agencyService.setName("Burgosland");
-        assertEquals("Burgosland", agencyService.getName());
+		assertEquals("Burgosland", agencyService.getName());
 
-        agencyService.setManager("Joseph");
-        assertEquals("Joseph", agencyService.getManager());
+		agencyService.setManager("Joseph");
+		assertEquals("Joseph", agencyService.getManager());
 
 	}
-	
+
 	@Test
 	public void agencyStatusWhithoutAtendee() {
-		String result = agencyService.getStatusWhithoutTicks();
-		assertEquals("Atendees: []\n" + 
-				"Queue: []", result);
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + "Queue: []", result);
 
 	}
 	
 	@Test
 	@Transactional
 	public void agencyStatusWithOneAtendee() {
-		
+
 		createAtendee(atendeeService, "A1");
-		String result = agencyService.getStatusWhithoutTicks();
-		assertEquals("Atendees: [A1]\n" + 
-				"Queue: []", result);
-		
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: [A1]\n" + "Queue: []", result);
 
 	}
-	
+
 	@Test
 	@Transactional
 	public void agencyStatusWithThreeAtendees() {
@@ -69,10 +71,12 @@ public class BurgosAgencyTest {
 	@Test
 	@Transactional
 	public void agencyStatusWithOneDemand() {
-		
+		createDemand(demandService, "D1");
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + 
+				"Queue: [D1]", result);
 		
 	}
-	
 	@Test
 	@Transactional
 	public void agencyStatusWithTickAndQueue() {
@@ -107,5 +111,4 @@ public class BurgosAgencyTest {
 		
 	}
 	
-
 }

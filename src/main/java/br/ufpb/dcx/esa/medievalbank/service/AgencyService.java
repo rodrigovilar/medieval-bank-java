@@ -59,9 +59,7 @@ public class AgencyService {
 	
 	public String getStatusWhithoutTicks() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
-		System.out.println(listOfTheAteendes);
 		List<Demand> listOfTheDemands = demandService.getAll();
-		System.out.println(listOfTheDemands);
 		
 		return "Atendees: "+ listOfTheAteendes+"\n" + 
 		"Queue: "+ listOfTheDemands;
