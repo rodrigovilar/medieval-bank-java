@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.ufpb.dcx.esa.medievalbank.model.Demand;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,7 +40,7 @@ public class BurgosAgencyTest {
 
 	@Test
 	public void agencyStatusWhithoutAtendee() {
-		String result = agencyService.getStatusWhithoutTicks();
+		String result = agencyService.getStatus();
 		assertEquals("Atendees: []\n" + "Queue: []", result);
 
 	}
@@ -51,7 +50,7 @@ public class BurgosAgencyTest {
 	public void agencyStatusWithOneAtendee() {
 
 		createAtendee(atendeeService, "A1");
-		String result = agencyService.getStatusWhithoutTicks();
+		String result = agencyService.getStatus();
 		assertEquals("Atendees: [A1]\n" + "Queue: []", result);
 
 	}
@@ -62,7 +61,7 @@ public class BurgosAgencyTest {
 		createAtendee(atendeeService, "A1");
 		createAtendee(atendeeService, "A2");
 		createAtendee(atendeeService, "A3");
-		String result = agencyService.getStatusWhithoutTicks();
+		String result = agencyService.getStatus();
 		assertEquals("Atendees: [A1, A2, A3]\n" + 
 				"Queue: []", result);
 		
@@ -72,7 +71,7 @@ public class BurgosAgencyTest {
 	@Transactional
 	public void agencyStatusWithOneDemand() {
 		createDemand(demandService, "D1");
-		String result = agencyService.getStatusWhithoutTicks();
+		String result = agencyService.getStatus();
 		assertEquals("Atendees: []\n" + 
 				"Queue: [D1]", result);
 		
@@ -83,20 +82,20 @@ public class BurgosAgencyTest {
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
-		String result = agencyService.getStatus();
+		String result = agencyService.getStatusWhithTicks();
 		assertEquals("Atendees: []\n" + 
 				"Queue: [D1, D2, D3]\n" + 
 				"Tick must return: 0", result);
 		
 		agencyService.increaseTick();
-		result = agencyService.getStatus();
+		result = agencyService.getStatusWhithTicks();
 		
 		assertEquals("Atendees: []\n" + 
 				"Queue: [D1, D2, D3]\n" + 
 				"Tick must return: 1", result);
 		
 		agencyService.increaseTick();
-		result = agencyService.getStatus();
+		result = agencyService.getStatusWhithTicks();
 		
 		
 		assertEquals("Atendees: []\n" + 

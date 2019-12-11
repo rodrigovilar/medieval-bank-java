@@ -47,7 +47,7 @@ public class AgencyService {
 	public String getManager() {
 		return this.manager;
 	}
-	public String getStatus() {
+	public String getStatusWhithTicks() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAll();
 		
@@ -55,7 +55,7 @@ public class AgencyService {
 		"Queue: "+ listOfTheDemands+"\n"+"Tick must return: "+this.getTick();
 	}
 	
-	public String getStatusWhithoutTicks() {
+	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAll();
 		
