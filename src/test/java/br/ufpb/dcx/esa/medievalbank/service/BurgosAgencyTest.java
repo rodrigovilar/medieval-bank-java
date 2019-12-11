@@ -68,6 +68,15 @@ public class BurgosAgencyTest {
 
 	@Test
 	@Transactional
+	public void agencyStatusWithOneDemand() {
+		createDemand(demandService, "D1");
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + "Queue: [D1]", result);
+
+	}
+
+	@Test
+	@Transactional
 	public void agencyStatusAfterRemovingAnAtendee() {
 		createAtendee(atendeeService, "A1");
 		Atendee a2 = createAtendee(atendeeService, "A2");
@@ -94,12 +103,6 @@ public class BurgosAgencyTest {
 		a1.setDemand(d1);
 		assertEquals("Atendees: [A1]\n" + "Queue: [D1]", result);
 		assertEquals(tick, 1);
-
-		// agencyService.increaseTick();
-		// tick = agencyService.getTick();
-		// assertEquals("Atendees: [A1]\n" + "Queue: [D1]", result);
-		// assertEquals(1, tick);
-		//
 	}
 
 }

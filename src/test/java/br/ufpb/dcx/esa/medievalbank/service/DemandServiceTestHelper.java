@@ -6,8 +6,8 @@ public class DemandServiceTestHelper {
 
 	static Demand createDemand(DemandService service, String aName) {
 
-		Demand demand1 = new Demand();
-		demand1.setName(aName);
-		return service.create(demand1);
+		Demand demand = new Demand();
+		demand.setName(aName);
+		return service.create(demand);
 	}
 }

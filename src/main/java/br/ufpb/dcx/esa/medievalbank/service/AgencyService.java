@@ -40,11 +40,8 @@ public class AgencyService {
 		this.demandService.create(demand);
 	}
 
-	public String getStatus() {
-		List<Atendee> listOfTheAteendes = atendeeService.getAll();
-		List<Demand> listOfTheDemands = demandService.getAll();
-
-		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
+	public void removeDemandOfTheAtendee(Demand demand) {
+		this.demandService.delete(demand);
 	}
 
 	public void increaseTick() {
@@ -53,5 +50,12 @@ public class AgencyService {
 
 	public int getTick() {
 		return this.tick;
+	}
+
+	public String getStatus() {
+		List<Atendee> listOfTheAteendes = atendeeService.getAll();
+		List<Demand> listOfTheDemands = demandService.getAll();
+
+		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
 	}
 }
