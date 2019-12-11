@@ -99,7 +99,6 @@ public class BurgosAgencyTest {
 		assertEquals("Atendees: []\n" + 
 				"Queue: [D1, D2, D3]\n" + 
 				"Tick must return: 1", result);
-		System.out.println("Resultado"+result);
 		
 		agencyService.increaseTick();
 		result = agencyService.getStatus();
