@@ -12,10 +12,11 @@ import br.ufpb.dcx.esa.medievalbank.model.Demand;
 public class AgencyService {
 	private String name;
 	private String manager;
-	
+	private int tick;
+
 	@Autowired
 	private AtendeeService atendeeService;
-	
+
 	@Autowired
 	private DemandService demandService;
 
@@ -34,11 +35,23 @@ public class AgencyService {
 	public String getManager() {
 		return this.manager;
 	}
+
+	public void createDemand(Demand demand) {
+		this.demandService.create(demand);
+	}
+
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAll();
-		
-		return "Atendees: "+ listOfTheAteendes+"\n" + 
-		"Queue: "+ listOfTheDemands;
+
+		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
+	}
+
+	public void increaseTick() {
+		this.tick++;
+	}
+
+	public int getTick() {
+		return this.tick;
 	}
 }
