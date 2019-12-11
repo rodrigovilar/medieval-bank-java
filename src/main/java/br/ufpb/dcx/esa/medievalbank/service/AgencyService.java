@@ -1,6 +1,5 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import br.ufpb.dcx.esa.medievalbank.model.Demand;
 public class AgencyService {
 	private String name;
 	private String manager;
-	private int tick;
+	private int tick = 0;
 	
 	@Autowired
 	private AtendeeService atendeeService;
@@ -55,6 +54,16 @@ public class AgencyService {
 		System.out.println(listOfTheDemands);
 		
 		return "Atendees: "+ listOfTheAteendes+"\n" + 
-		"Queue: "+ listOfTheDemands+"\n"+"Tick must return: "+this.tick;
+		"Queue: "+ listOfTheDemands+"\n"+"Tick must return: "+this.getTick();
+	}
+	
+	public String getStatusWhithoutTicks() {
+		List<Atendee> listOfTheAteendes = atendeeService.getAll();
+		System.out.println(listOfTheAteendes);
+		List<Demand> listOfTheDemands = demandService.getAll();
+		System.out.println(listOfTheDemands);
+		
+		return "Atendees: "+ listOfTheAteendes+"\n" + 
+		"Queue: "+ listOfTheDemands;
 	}
 }

@@ -36,7 +36,7 @@ public class BurgosAgencyTest {
 	
 	@Test
 	public void agencyStatusWhithoutAtendee() {
-		String result = agencyService.getStatus();
+		String result = agencyService.getStatusWhithoutTicks();
 		assertEquals("Atendees: []\n" + 
 				"Queue: []", result);
 
@@ -47,7 +47,7 @@ public class BurgosAgencyTest {
 	public void agencyStatusWithOneAtendee() {
 		
 		createAtendee(atendeeService, "A1");
-		String result = agencyService.getStatus();
+		String result = agencyService.getStatusWhithoutTicks();
 		assertEquals("Atendees: [A1]\n" + 
 				"Queue: []", result);
 		
@@ -60,7 +60,7 @@ public class BurgosAgencyTest {
 		createAtendee(atendeeService, "A1");
 		createAtendee(atendeeService, "A2");
 		createAtendee(atendeeService, "A3");
-		String result = agencyService.getStatus();
+		String result = agencyService.getStatusWhithoutTicks();
 		assertEquals("Atendees: [A1, A2, A3]\n" + 
 				"Queue: []", result);
 		
@@ -86,17 +86,23 @@ public class BurgosAgencyTest {
 		
 		String result = agencyService.getStatus();
 		assertEquals("Atendees: []\n" + 
-				"Queue: [D1,D2,D3]\n" + 
+				"Queue: [D1, D2, D3]\n" + 
 				"Tick must return: 0", result);
+		
+		agencyService.increaseTick();
 		result = agencyService.getStatus();
 		
 		assertEquals("Atendees: []\n" + 
-				"Queue: [D1,D2,D3]\n" + 
+				"Queue: [D1, D2, D3]\n" + 
 				"Tick must return: 1", result);
+		System.out.println("Resultado"+result);
 		
+		agencyService.increaseTick();
 		result = agencyService.getStatus();
+		
+		
 		assertEquals("Atendees: []\n" + 
-				"Queue: [D1,D2,D3]\n" + 
+				"Queue: [D1, D2, D3]\n" + 
 				"Tick must return: 2", result);
 		
 	}
