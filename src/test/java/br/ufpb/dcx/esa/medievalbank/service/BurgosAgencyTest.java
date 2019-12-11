@@ -3,12 +3,17 @@ package br.ufpb.dcx.esa.medievalbank.service;
 import static org.junit.Assert.assertEquals;
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 
+import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
+
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,6 +24,9 @@ public class BurgosAgencyTest {
 
 	@Autowired
 	private AtendeeService atendeeService;
+	
+	@Autowired
+	private DemandService demandService;
 
 	@Test
 	public void initialConfiguration() {
@@ -37,7 +45,7 @@ public class BurgosAgencyTest {
 		assertEquals("Atendees: []\n" + "Queue: []", result);
 
 	}
-
+	
 	@Test
 	@Transactional
 	public void agencyStatusWithOneAtendee() {
@@ -55,9 +63,21 @@ public class BurgosAgencyTest {
 		createAtendee(atendeeService, "A2");
 		createAtendee(atendeeService, "A3");
 		String result = agencyService.getStatus();
-		assertEquals("Atendees: [A1, A2, A3]\n" + "Queue: []", result);
-
+		assertEquals("Atendees: [A1, A2, A3]\n" + 
+				"Queue: []", result);
+		
 	}
+	
+	@Test
+	@Transactional
+	public void agencyStatusWithOneDemand() {
+		createDemand(demandService, "D1");
+		String result = agencyService.getStatus();
+		assertEquals("Atendees: []\n" + 
+				"Queue: [D1]", result);
+		
+	}
+
 
 	@Test
 	@Transactional
