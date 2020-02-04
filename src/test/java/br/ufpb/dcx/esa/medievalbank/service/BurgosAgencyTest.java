@@ -1,6 +1,9 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 
 import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
@@ -11,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -72,18 +73,28 @@ public class BurgosAgencyTest {
 		createDemand(demandService, "D1");
 		String result = agencyService.getStatus();
 		assertEquals("Atendees: []\n" + "Queue: [D1]", result);
-
 	}
 
 	@Test
 	@Transactional
-	public void agencyStatusAfterRemovingAnAtendee() {
-		createAtendee(atendeeService, "A1");
-		Atendee a2 = createAtendee(atendeeService, "A2");
-		createAtendee(atendeeService, "A3");
-		atendeeService.delete(atendeeService.getOne(a2.getId()));
-		String result = agencyService.getStatus();
-		assertEquals("Atendees: [A1, A3]\n" + "Queue: []", result);
+	public void agencyStatusWithTickAndQueue() {
+		// agencyService.resetTick();
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+		String result = agencyService.getStatusWhithTicks();
+		System.out.println(result);
+		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + "Tick must return: 0", result);
+
+		agencyService.increaseTick();
+		result = agencyService.getStatusWhithTicks();
+
+		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + "Tick must return: 1", result);
+
+		agencyService.increaseTick();
+		result = agencyService.getStatusWhithTicks();
+
+		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + "Tick must return: 2", result);
 
 	}
 
@@ -108,4 +119,8 @@ public class BurgosAgencyTest {
 
 	}
 
+	@Before
+	public void resetTick() {
+		this.agencyService.resetTick();
+	}
 }
