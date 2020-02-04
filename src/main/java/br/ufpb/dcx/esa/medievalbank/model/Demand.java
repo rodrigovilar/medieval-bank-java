@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Demand implements Serializable{
+public class Demand implements Serializable {
 
 	/**
 	 * 
@@ -17,8 +17,16 @@ public class Demand implements Serializable{
 	@Id
 	@GeneratedValue
 	private int id;
-	private String name;	
+	private String name;
 	
+	public Demand(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
+	public Demand() {
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -30,6 +38,11 @@ public class Demand implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return name ;
 	}
 
 }
