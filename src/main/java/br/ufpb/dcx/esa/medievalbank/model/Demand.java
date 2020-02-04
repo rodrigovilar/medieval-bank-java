@@ -19,14 +19,16 @@ public class Demand implements Serializable {
 	private int id;
 	private String name;
 	
+	public Demand() {
+	
+	}
+	public Demand(String name) {
+		this.name = name;
+	}
 	public Demand(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
-	
-	public Demand() {
-	}
-
 	public int getId() {
 		return id;
 	}
