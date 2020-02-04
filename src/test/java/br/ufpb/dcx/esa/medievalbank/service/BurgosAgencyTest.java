@@ -1,6 +1,9 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
 
@@ -72,18 +75,48 @@ public class BurgosAgencyTest {
 		createDemand(demandService, "D1");
 		String result = agencyService.getStatus();
 		assertEquals("Atendees: []\n" + "Queue: [D1]", result);
+	}
+
+	@Test
+	@Transactional
+	public void agencyStatusWithTickAndQueue() {
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+		String result = agencyService.getStatusWhithTicks();
+		System.out.println(result);
+		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + "Tick must return: 0", result);
+
+		agencyService.increaseTick();
+		result = agencyService.getStatusWhithTicks();
+
+		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + "Tick must return: 1", result);
+
+		agencyService.increaseTick();
+		result = agencyService.getStatusWhithTicks();
+
+		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + "Tick must return: 2", result);
 
 	}
 
 	@Test
 	@Transactional
-	public void agencyStatusAfterRemovingAnAtendee() {
-		createAtendee(atendeeService, "A1");
-		Atendee a2 = createAtendee(atendeeService, "A2");
-		createAtendee(atendeeService, "A3");
-		atendeeService.delete(atendeeService.getOne(a2.getId()));
+	public void agencyStatusWithTick() {
+
+		int tick = agencyService.getTick();
 		String result = agencyService.getStatus();
-		assertEquals("Atendees: [A1, A3]\n" + "Queue: []", result);
+		assertEquals("Atendees: []\n" + "Queue: []", result);
+		assertEquals(0, tick);
+
+		agencyService.increaseTick();
+		tick = agencyService.getTick();
+		assertEquals("Atendees: []\n" + "Queue: []", result);
+		assertEquals(1, tick);
+
+		agencyService.increaseTick();
+		tick = agencyService.getTick();
+		assertEquals("Atendees: []\n" + "Queue: []", result);
+		assertEquals(2, tick);
 
 	}
 
@@ -93,16 +126,23 @@ public class BurgosAgencyTest {
 
 		Atendee a1 = createAtendee(atendeeService, "A1");
 		Demand d1 = createDemand(demandService, "D1");
-		String result = agencyService.getStatus();
+
+		String status = agencyService.getStatus();
 		int tick = agencyService.getTick();
-		assertEquals("Atendees: [A1]\n" + "Queue: [D1]", result);
+		assertEquals("Atendees: [A1]\n" + "Queue: [D1]", status);
 		assertEquals(tick, 0);
 
 		agencyService.increaseTick();
 		tick = agencyService.getTick();
-		a1.setDemand(d1);
-		assertEquals("Atendees: [A1]\n" + "Queue: [D1]", result);
+		agencyService.setDemandToAtendee(d1, a1.getId());
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: []", status);
 		assertEquals(tick, 1);
+	}
+
+	@Before
+	public void resetTick() {
+		this.agencyService.resetTick();
 	}
 
 }

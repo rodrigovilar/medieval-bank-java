@@ -1,6 +1,7 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,12 @@ public class DemandService {
 
 	public void delete(Demand demand) {
 		repository.delete(demand);
+	}
+
+	public Demand update(Integer demandID, Demand demand) {
+		Demand searchedDemand = this.repository.getOne(demandID);
+		searchedDemand = demand;
+		return repository.save(searchedDemand);
 	}
 
 }
