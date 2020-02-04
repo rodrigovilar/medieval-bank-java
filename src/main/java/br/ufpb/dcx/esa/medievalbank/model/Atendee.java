@@ -9,10 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Atendee implements Serializable{
+public class Atendee implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue
 	private int id;
@@ -20,7 +20,8 @@ public class Atendee implements Serializable{
 	private String email;
 	private String ssn;
 	private Date creation;
-	
+	private Demand demand;
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -43,12 +44,12 @@ public class Atendee implements Serializable{
 
 	public void setCreation(Date date) {
 		this.creation = date;
-		
+
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-		
+
 	}
 
 	public String getEmail() {
@@ -57,10 +58,25 @@ public class Atendee implements Serializable{
 
 	public void setSSN(String ssn) {
 		this.ssn = ssn;
-		
+
 	}
+
 	public String getSSN() {
 		return this.ssn;
+	}
+
+	/**
+	 * @param demand the demand to set
+	 */
+	public void setDemand(Demand demand) {
+		this.demand = demand;
+	}
+
+	/**
+	 * @return the demand
+	 */
+	public Demand getDemand() {
+		return demand;
 	}
 
 	@Override
@@ -111,7 +127,11 @@ public class Atendee implements Serializable{
 
 	@Override
 	public String toString() {
-		return name ;
+		String str = this.name;
+		if (this.demand != null) {
+			str += "->" + demand;
+		}
+		return str;
 	}
-	
+
 }

@@ -56,6 +56,21 @@ public class AgencyService {
 		return this.manager;
 	}
 
+	public void createDemand(Demand demand) {
+		this.demandService.create(demand);
+	}
+
+	public void removeDemandOfTheAtendee(Demand demand) {
+		this.demandService.delete(demand);
+	}
+
+	public void setDemandToAtendee(Demand demand, int atendeeID) {
+		Atendee atendee = atendeeService.getOne(atendeeID);
+		atendee.setDemand(demand);
+		atendeeService.update(atendee);
+		demandService.delete(demand);
+	}
+
 	public String getStatusWhithTicks() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAll();

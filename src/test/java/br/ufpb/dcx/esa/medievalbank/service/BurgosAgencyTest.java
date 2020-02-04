@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
-
 import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
 
 import org.junit.Test;
@@ -14,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import br.ufpb.dcx.esa.medievalbank.model.Atendee;
+import br.ufpb.dcx.esa.medievalbank.model.Demand;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -78,7 +80,6 @@ public class BurgosAgencyTest {
 	@Test
 	@Transactional
 	public void agencyStatusWithTickAndQueue() {
-		// agencyService.resetTick();
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
@@ -119,8 +120,29 @@ public class BurgosAgencyTest {
 
 	}
 
+	@Test
+	@Transactional
+	public void agencyStatusWithTick_QueueAndAtendee() {
+
+		Atendee a1 = createAtendee(atendeeService, "A1");
+		Demand d1 = createDemand(demandService, "D1");
+
+		String status = agencyService.getStatus();
+		int tick = agencyService.getTick();
+		assertEquals("Atendees: [A1]\n" + "Queue: [D1]", status);
+		assertEquals(tick, 0);
+
+		agencyService.increaseTick();
+		tick = agencyService.getTick();
+		agencyService.setDemandToAtendee(d1, a1.getId());
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: []", status);
+		assertEquals(tick, 1);
+	}
+
 	@Before
 	public void resetTick() {
 		this.agencyService.resetTick();
 	}
+
 }
