@@ -1,5 +1,6 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,10 @@ public class AgencyService {
 		Atendee atendee = atendeeService.getOne(atendeeID);
 		atendee.setDemand(demand);
 		atendeeService.update(atendee);
-		demandService.delete(demand);
+
+		demand.setAllocated(true);
+		demand.setAtendee(atendee);
+		demandService.update(demand);
 	}
 
 	public String getStatusWhithTicks() {
@@ -82,7 +86,8 @@ public class AgencyService {
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 
-		List<Demand> listOfTheDemands = demandService.getAll();
+		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
+
 		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
 	}
 }

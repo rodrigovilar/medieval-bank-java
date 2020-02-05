@@ -4,9 +4,13 @@ package br.ufpb.dcx.esa.medievalbank.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Atendee implements Serializable {
@@ -15,11 +19,23 @@ public class Atendee implements Serializable {
 
 	@Id
 	@GeneratedValue
+	@Column(name = "id")
 	private int id;
+
+	@Column(name = "name")
 	private String name;
+
+	@Column(name = "email")
 	private String email;
+
+	@Column(name = "ssn")
 	private String ssn;
+
+	@Column(name = "creation")
 	private Date creation;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "demand_id", referencedColumnName = "id")
 	private Demand demand;
 
 	public void setName(String name) {
