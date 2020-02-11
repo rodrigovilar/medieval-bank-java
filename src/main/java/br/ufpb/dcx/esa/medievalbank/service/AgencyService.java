@@ -65,6 +65,7 @@ public class AgencyService {
 		this.demandService.delete(demand);
 	}
 
+	// Colocar para setar as demandas com os atendentes disponíveis
 	public void setDemandToAtendee(Demand demand, int atendeeID) {
 		Atendee atendee = atendeeService.getOne(atendeeID);
 		atendee.setDemand(demand);
@@ -75,7 +76,7 @@ public class AgencyService {
 		demandService.update(demand);
 	}
 
-	public String getStatusWhithTicks() {
+	public String getStatusWhithTicks() { // TODO: Remover este método
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAll();
 

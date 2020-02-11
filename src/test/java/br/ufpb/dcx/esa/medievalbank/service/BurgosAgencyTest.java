@@ -84,7 +84,11 @@ public class BurgosAgencyTest {
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
 		String result = agencyService.getStatusWhithTicks();
+
+		// TODO: Remover o sysout
 		System.out.println(result);
+
+		// TODO: Remover o "Tick must return: 0"
 		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + "Tick must return: 0", result);
 
 		agencyService.increaseTick();
