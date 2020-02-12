@@ -1,6 +1,5 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,19 @@ public class AgencyService {
 
 	public void increaseTick() {
 		this.tick++;
+		List<Demand> unllocatedDemands = this.demandService.getAllUnallocated();
+		List<Atendee> atendees = this.atendeeService.getAllAtendeesWithoutDemand();
+		for (Atendee atendee : atendees) {
+			if (!unllocatedDemands.isEmpty()) {
+				Demand demand = unllocatedDemands.remove(0);
+				demand.setAllocated(true);
+				demand.setAtendee(atendee);
+				atendee.setDemand(demand);
+
+				this.atendeeService.update(atendee);
+				this.demandService.update(demand);
+			}
+		}
 	}
 
 	public int getTick() {
@@ -65,20 +77,8 @@ public class AgencyService {
 		this.demandService.delete(demand);
 	}
 
-	// Colocar para setar as demandas com os atendentes disponíveis
-	public void setDemandToAtendee(Demand demand, int atendeeID) {
-		Atendee atendee = atendeeService.getOne(atendeeID);
-		atendee.setDemand(demand);
-		atendeeService.update(atendee);
-
-		demand.setAllocated(true);
-		demand.setAtendee(atendee);
-		demandService.update(demand);
-	}
-
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
-
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
 
 		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
