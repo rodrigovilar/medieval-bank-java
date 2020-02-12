@@ -76,14 +76,6 @@ public class AgencyService {
 		demandService.update(demand);
 	}
 
-	public String getStatusWhithTicks() { // TODO: Remover este método
-		List<Atendee> listOfTheAteendes = atendeeService.getAll();
-		List<Demand> listOfTheDemands = demandService.getAll();
-
-		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands + "\n" 
-				+ this.getTick();
-	}
-
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 

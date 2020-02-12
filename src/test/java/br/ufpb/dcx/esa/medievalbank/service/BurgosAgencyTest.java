@@ -83,18 +83,17 @@ public class BurgosAgencyTest {
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
-		String result = agencyService.getStatusWhithTicks();
+		String result = agencyService.getStatus() + "\n" + agencyService.getTick();
 
-		// TODO: Remover o "Tick must return: 0"
 		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + 0, result);
 
 		agencyService.increaseTick();
-		result = agencyService.getStatusWhithTicks();
+		result = agencyService.getStatus() + "\n" + agencyService.getTick();;
 
 		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + 1, result);
 
 		agencyService.increaseTick();
-		result = agencyService.getStatusWhithTicks();
+		result = agencyService.getStatus() + "\n" + agencyService.getTick();;
 
 		assertEquals("Atendees: []\n" + "Queue: [D1, D2, D3]\n" + 2, result);
 
