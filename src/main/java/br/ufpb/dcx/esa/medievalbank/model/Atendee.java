@@ -143,11 +143,7 @@ public class Atendee implements Serializable {
 
 	@Override
 	public String toString() {
-		String str = this.name;
-		if (this.demand != null) {
-			str += "->" + demand;
-		}
-		return str;
+		return (this.demand == null) ? this.name : this.name + "->" + demand.getName();
 	}
 
 }
