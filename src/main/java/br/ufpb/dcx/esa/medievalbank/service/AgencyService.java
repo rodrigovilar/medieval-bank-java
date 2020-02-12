@@ -80,7 +80,7 @@ public class AgencyService {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAll();
 
-		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands + "\n" + "Tick must return: "
+		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands + "\n" 
 				+ this.getTick();
 	}
 
