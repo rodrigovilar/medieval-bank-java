@@ -56,7 +56,7 @@ public class AtendeeServiceTestHelper {
 		}
 	}
 
-	static Atendee createAtendee(AtendeeService service, String aName) {
+	public static Atendee createAtendee(AtendeeService service, String aName) {
 		return createAtendee(service, aName, null);
 	}
 
