@@ -173,4 +173,23 @@ public class BurgosAgencyTest {
 		assertEquals("Atendees: [A1->D2]\n" + "Queue: []", status);
 	}
 
+	@Test
+	@Transactional
+	public void fifo_finalizeDemandInQueue() {
+		createAtendee(atendeeService, "A1");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+
+		agencyService.finalizeDemandAtTheNextTick("D2");
+		agencyService.increaseTick();
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: [D3]", status);
+
+		agencyService.finalizeDemandAtTheNextTick("D3");
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: []", status);
+	}
+
 }

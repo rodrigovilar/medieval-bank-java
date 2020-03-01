@@ -60,10 +60,14 @@ public class AgencyService {
 		if (isNull(demandsToBeFinalized)) return;
 		for (Demand demand: demandsToBeFinalized) {
 			Atendee atendee = this.atendeeService.getAtendeeByDemandName(demand.getName());
-			atendee.setDemand(null);
-			demand.setAtendee(null);
-			this.atendeeService.update(atendee);
-			this.demandService.update(demand);
+			if(!isNull(atendee)) {
+				atendee.setDemand(null);
+				demand.setAtendee(null);
+				this.atendeeService.update(atendee);
+				this.demandService.update(demand);
+			} else {
+				this.demandService.delete(demand);
+			}
 		}
 	}
 
