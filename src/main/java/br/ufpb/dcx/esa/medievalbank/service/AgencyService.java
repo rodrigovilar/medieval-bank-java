@@ -1,5 +1,6 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ public class AgencyService {
 	private String name;
 	private String manager;
 	private int tick = 0;
+
+	List<Demand> demandsToBeFinalized;
 
 	@Autowired
 	private AtendeeService atendeeService;
@@ -28,12 +31,9 @@ public class AgencyService {
 		this.demandService = demandService;
 	}
 
-	public void resetTick() {
-		this.tick = 0;
-	}
-
 	public void increaseTick() {
 		this.tick++;
+		this.finalizeDemand();
 		List<Demand> unllocatedDemands = this.demandService.getAllUnallocated();
 		List<Atendee> atendees = this.atendeeService.getAllAtendeesWithoutDemand();
 		for (Atendee atendee : atendees) {
@@ -47,6 +47,28 @@ public class AgencyService {
 				this.demandService.update(demand);
 			}
 		}
+	}
+
+	public void finalizeDemandAtTheNextTick(String name) {
+		if (isNull(demandsToBeFinalized)) demandsToBeFinalized = new ArrayList<>();
+
+		Demand demand = this.demandService.getDemandByName(name);
+		demandsToBeFinalized.add(demand);
+	}
+
+	private void finalizeDemand(){
+		if (isNull(demandsToBeFinalized)) return;
+		for (Demand demand: demandsToBeFinalized) {
+			Atendee atendee = this.atendeeService.getAtendeeByDemandName(demand.getName());
+			atendee.setDemand(null);
+			demand.setAtendee(null);
+			this.atendeeService.update(atendee);
+			this.demandService.update(demand);
+		}
+	}
+
+	private boolean isNull(Object object) {
+		return (object == null);
 	}
 
 	public int getTick() {

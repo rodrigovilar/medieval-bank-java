@@ -2,8 +2,6 @@ package br.ufpb.dcx.esa.medievalbank.service;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
-
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
 
@@ -11,10 +9,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest
 public class BurgosAgencyTest {
 
@@ -138,9 +138,21 @@ public class BurgosAgencyTest {
 		assertEquals(tick, 1);
 	}
 
-	@Before
-	public void resetTick() {
-		this.agencyService.resetTick();
+	@Test
+	@Transactional
+	public void fifo_competitionBetweenTwoDemands() {
+		createAtendee(atendeeService, "A1");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+
+		agencyService.increaseTick();
+		agencyService.finalizeDemandAtTheNextTick("D1");
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: [D2]", status);
+
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D2]\n" + "Queue: []", status);
 	}
 
 }
