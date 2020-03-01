@@ -155,4 +155,22 @@ public class BurgosAgencyTest {
 		assertEquals("Atendees: [A1->D2]\n" + "Queue: []", status);
 	}
 
+	@Test
+	@Transactional
+	public void fifo_competitionBetweenDemandsFromDifferentStart() {
+		createAtendee(atendeeService, "A1");
+		createDemand(demandService, "D1");
+
+		AgencyServiceTestHelper.increaseTick(agencyService, 2);
+		createDemand(demandService, "D2");
+
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: [D2]", status);
+
+		agencyService.finalizeDemandAtTheNextTick("D1");
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D2]\n" + "Queue: []", status);
+	}
+
 }
