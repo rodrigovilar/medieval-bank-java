@@ -1,6 +1,6 @@
 package br.ufpb.dcx.esa.medievalbank.proxy;
 
-import br.ufpb.dcx.esa.medievalbank.annotation.LOG;
+import br.ufpb.dcx.esa.medievalbank.annotation.LogMethod;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,19 +12,16 @@ public class ServiceInvocationHandler implements InvocationHandler {
         this.obj = obj;
     }
 
-    Object handleInsert(Method method, Object[] args) throws Throwable {
-        String modelName = args[0].getClass().getSimpleName();
-        System.out.println("Trying to insert " + modelName.toLowerCase());
-        Object result = method.invoke(obj, args);
-        System.out.println(modelName + " created");
-        return result;
-    }
-
-    Object handleDelete(Method method, Object[] args) throws Throwable {
-        String modelName = args[0].getClass().getSimpleName();
-        System.out.println("Trying to delete " + modelName.toLowerCase());
-        Object result = method.invoke(obj, args);
-        System.out.println(modelName + " deleted");
+    Object handleLogInvocation(Method method, Object[] args) throws Throwable {
+        System.out.println(String.format("Calling method %s", method.getName()));
+        Object result = null;
+        try {
+            result = method.invoke(obj, args);
+        } catch (Throwable e) {
+            System.out.println(String.format("Exception caught in method %s. Exception message was: %s", method.getName(), e.getCause().getMessage()));
+            throw e;
+        }
+        System.out.println(String.format("Succesfully finished call to method %s", method.getName()));
         return result;
     }
 
@@ -32,18 +29,12 @@ public class ServiceInvocationHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object result;
         try {
-            if(obj.getClass().isAnnotationPresent(LOG.class)) {
-                if (method.getName().contains("insert")) {
-                    result = handleInsert(method, args);
-                }else if (method.getName().contains("delete")){
-                    result = handleDelete(method, args);
-                } else {
-                    result = method.invoke(obj, args);
-                }
+            Method objMethod = obj.getClass().getMethod(method.getName(), method.getParameterTypes());
+            if (objMethod.isAnnotationPresent(LogMethod.class)) {
+                result = handleLogInvocation(method, args);
             } else {
                 result = method.invoke(obj, args);
             }
-
         } catch (Exception e) {
             throw e;
         }
