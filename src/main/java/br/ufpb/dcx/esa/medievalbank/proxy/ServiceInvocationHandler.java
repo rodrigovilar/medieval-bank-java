@@ -1,27 +1,30 @@
 package br.ufpb.dcx.esa.medievalbank.proxy;
 
 import br.ufpb.dcx.esa.medievalbank.annotation.LogMethod;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 public class ServiceInvocationHandler implements InvocationHandler {
     private Object obj;
+    private Logger logger;
 
-    public ServiceInvocationHandler(Object obj) {
+    public ServiceInvocationHandler(Object obj, Logger logger) {
         this.obj = obj;
+        this.logger = logger;
     }
 
     Object handleLogInvocation(Method method, Object[] args) throws Throwable {
-        System.out.println(String.format("Calling method %s", method.getName()));
+        this.logger.trace(String.format("Calling method %s", method.getName()));
         Object result = null;
         try {
             result = method.invoke(obj, args);
         } catch (Throwable e) {
-            System.out.println(String.format("Exception caught in method %s. Exception message was: %s", method.getName(), e.getCause().getMessage()));
+            this.logger.error(String.format("Exception caught in method %s. Exception message was: %s", method.getName(), e.getCause().getMessage()));
             throw e;
         }
-        System.out.println(String.format("Succesfully finished call to method %s", method.getName()));
+        logger.success(String.format("Succesfully finished call to method %s", method.getName()));
         return result;
     }
 
