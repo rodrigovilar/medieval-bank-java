@@ -207,4 +207,23 @@ public class BurgosAgencyTest {
 		String status = agencyService.getStatus();
 		assertEquals("Atendees: [A1->D1, A2->D2]\n" + "Queue: [D3, D4]", status);
 	}
+
+	@Test
+	@Transactional
+	public void fifo_removeDemandFromTheSecondAtendee() {
+		createAtendee(atendeeService, "A1");
+		createAtendee(atendeeService, "A2");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+		createDemand(demandService, "D4");
+
+		agencyService.increaseTick();
+		agencyService.finalizeDemandAtTheNextTick("D2");
+		agencyService.increaseTick();
+
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1, A2->D3]\n" + "Queue: [D4]", status);
+	}
+
 }
