@@ -16,7 +16,8 @@ public class AtendeeServiceTestHelper {
 		assertEquals(anEmail, createdAtendee.getEmail());
 	}
 
-	static void tryCreateAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage, String expectedExceptionMessage) {
+	static void tryCreateAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage,
+			String expectedExceptionMessage) {
 		try {
 			service.create(atendee);
 			fail(failMessage);
@@ -25,7 +26,8 @@ public class AtendeeServiceTestHelper {
 		}
 	}
 
-	static void tryUpdateAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage, String expectedExceptionMessage) {
+	static void tryUpdateAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage,
+			String expectedExceptionMessage) {
 		try {
 			service.update(atendee);
 			fail(failMessage);
@@ -33,7 +35,7 @@ public class AtendeeServiceTestHelper {
 			assertEquals(expectedExceptionMessage, e.getMessage());
 		}
 	}
-	
+
 	static void tryGetOneAtendeeWithError(AtendeeService service, Atendee atendee, String failMessage,
 			String expectedExceptionMessage) {
 		try {
