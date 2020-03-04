@@ -37,5 +37,14 @@ public class UserServiceTest {
 		String expectedExceptionMessage = "User username cannot be duplicated";
 		tryCreateUserWithError(userService, userEquals, failMessage, expectedExceptionMessage);
 	}
+	
+	@Test
+	@Transactional
+	public void createUserWithoutUsername() {
+		User user = new User(null,"12345");
+		String failMessage = "Test failed because the created user has null username.";
+		String expectedExceptionMessage = "Username is mandatory";
+		tryCreateUserWithError(userService, user, failMessage, expectedExceptionMessage);
+	}
 
 }

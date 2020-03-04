@@ -14,7 +14,8 @@ public class UserService {
 	private UserRepository repository;
 	
 	public User create(User user) {
-		this.validateDuplicatedName(user);
+		this.validateDuplicatedUsername(user);
+		this.validadeIsNullUsername(user);
 		return repository.save(user);
 	}
 	
@@ -22,9 +23,15 @@ public class UserService {
 		return repository.getOne(id);
 	}
 	
-	private void validateDuplicatedName(User user) {
+	private void validateDuplicatedUsername(User user) {
 		if(repository.existsByUsername(user.getUsername())) {
 			throw new MedievalBankException("User username cannot be duplicated");
+		}
+	}
+	
+	private void validadeIsNullUsername(User user) {
+		if(user.getUsername() == null) {
+			throw new MedievalBankException("Username is mandatory");
 		}
 	}
 	
