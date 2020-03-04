@@ -3,6 +3,8 @@ package br.ufpb.dcx.esa.medievalbank.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +25,7 @@ public class AgencyService {
 	@Autowired
 	private DemandService demandService;
 
-	public DemandService getDemandService() {
-		return demandService;
-	}
-
-	public void setDemandService(DemandService demandService) {
-		this.demandService = demandService;
-	}
+	private Logger logger;
 
 	public void increaseTick() {
 		this.tick++;
@@ -49,18 +45,48 @@ public class AgencyService {
 		}
 	}
 
+	public void resetTick() {
+		this.tick = 0;
+	}
+
+	public Atendee addAttendee(Atendee atendee) {
+		try {
+			this.logger.info("Trying to create attendee");
+			Atendee att = this.atendeeService.create(atendee);
+			this.logger.success("Attendee created");
+			return att;
+		} catch (MedievalBankException e) {
+			this.logger.error(e.getMessage());
+			throw e;
+		}
+	}
+
+	public void removeAttendee(Atendee atendee) {
+		this.atendeeService.delete(atendee);
+	}
+
+	public void createDemand(Demand demand) {
+		this.demandService.create(demand);
+	}
+
+	public void removeDemandOfTheAtendee(Demand demand) {
+		this.demandService.delete(demand);
+	}
+
 	public void finalizeDemandAtTheNextTick(String name) {
-		if (isNull(demandsToBeFinalized)) demandsToBeFinalized = new ArrayList<>();
+		if (isNull(demandsToBeFinalized))
+			demandsToBeFinalized = new ArrayList<>();
 
 		Demand demand = this.demandService.getDemandByName(name);
 		demandsToBeFinalized.add(demand);
 	}
 
-	private void finalizeDemand(){
-		if (isNull(demandsToBeFinalized)) return;
-		for (Demand demand: demandsToBeFinalized) {
+	private void finalizeDemand() {
+		if (isNull(demandsToBeFinalized))
+			return;
+		for (Demand demand : demandsToBeFinalized) {
 			Atendee atendee = this.atendeeService.getAtendeeByDemandName(demand.getName());
-			if(!isNull(atendee)) {
+			if (!isNull(atendee)) {
 				atendee.setDemand(null);
 				demand.setAtendee(null);
 				this.atendeeService.update(atendee);
@@ -95,12 +121,20 @@ public class AgencyService {
 		return this.manager;
 	}
 
-	public void createDemand(Demand demand) {
-		this.demandService.create(demand);
+	public DemandService getDemandService() {
+		return demandService;
 	}
 
-	public void removeDemandOfTheAtendee(Demand demand) {
-		this.demandService.delete(demand);
+	public void setDemandService(DemandService demandService) {
+		this.demandService = demandService;
+	}
+
+	public void setAtendeeService(AtendeeService atendeeService) {
+		this.atendeeService = atendeeService;
+	}
+
+	public AtendeeService getAtendeeService() {
+		return atendeeService;
 	}
 
 	public String getStatus() {
@@ -108,5 +142,13 @@ public class AgencyService {
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
 
 		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
+
+	public Logger getLogger() {
+		return logger;
 	}
 }

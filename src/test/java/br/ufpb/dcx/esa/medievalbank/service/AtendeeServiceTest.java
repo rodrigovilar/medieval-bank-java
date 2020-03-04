@@ -147,7 +147,7 @@ public class AtendeeServiceTest {
 	
 	@Test
 	@Transactional
-	public void t08_updateAtendeeWithUnknownId() {
+	public void t08_updateAtendeeWithUnknownId()  {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 		Atendee newAtendee = new Atendee();
 		newAtendee.setCreation(createdAtendee.getCreation());
