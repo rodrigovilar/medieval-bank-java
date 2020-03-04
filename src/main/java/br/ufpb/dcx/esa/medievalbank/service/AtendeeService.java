@@ -90,6 +90,10 @@ public class AtendeeService {
 		return repository.findAll();
 	}
 
+	public Atendee getAtendeeByDemandName(String name) {
+		return this.repository.findByDemandName(name);
+	}
+
 	public List<Atendee> getAllAtendeesWithoutDemand() {
 		return repository.findByDemandIsNull();
 	}

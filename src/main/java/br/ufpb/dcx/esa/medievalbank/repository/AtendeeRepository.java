@@ -13,4 +13,6 @@ public interface AtendeeRepository extends JpaRepository<Atendee, Integer> {
 	List<Atendee> findByNameContaining(String name);
 
 	List<Atendee> findByDemandIsNull();
+
+	Atendee findByDemandName(String name);
 }

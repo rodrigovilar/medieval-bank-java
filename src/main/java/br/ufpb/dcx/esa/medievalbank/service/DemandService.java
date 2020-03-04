@@ -28,6 +28,10 @@ public class DemandService {
 		return this.repository.findByAllocatedFalse();
 	}
 
+	public Demand getDemandByName(String name) {
+		return this.repository.findByName(name);
+	}
+
 	public void delete(Demand demand) {
 		repository.delete(demand);
 	}

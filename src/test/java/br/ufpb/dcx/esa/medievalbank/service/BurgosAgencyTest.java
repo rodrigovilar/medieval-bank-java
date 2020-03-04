@@ -2,8 +2,6 @@ package br.ufpb.dcx.esa.medievalbank.service;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
-
 import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
 
@@ -11,10 +9,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest
 public class BurgosAgencyTest {
 
@@ -138,9 +138,117 @@ public class BurgosAgencyTest {
 		assertEquals(tick, 1);
 	}
 
-	@Before
-	public void resetTick() {
-		this.agencyService.resetTick();
+	@Test
+	@Transactional
+	public void fifo_competitionBetweenTwoDemands() {
+		createAtendee(atendeeService, "A1");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+
+		agencyService.increaseTick();
+		agencyService.finalizeDemandAtTheNextTick("D1");
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: [D2]", status);
+
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D2]\n" + "Queue: []", status);
+	}
+
+	@Test
+	@Transactional
+	public void fifo_competitionBetweenDemandsFromDifferentStart() {
+		createAtendee(atendeeService, "A1");
+		createDemand(demandService, "D1");
+
+		AgencyServiceTestHelper.increaseTick(agencyService, 2);
+		createDemand(demandService, "D2");
+
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: [D2]", status);
+
+		agencyService.finalizeDemandAtTheNextTick("D1");
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D2]\n" + "Queue: []", status);
+	}
+
+	@Test
+	@Transactional
+	public void fifo_finalizeDemandInQueue() {
+		createAtendee(atendeeService, "A1");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+
+		agencyService.finalizeDemandAtTheNextTick("D2");
+		agencyService.increaseTick();
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: [D3]", status);
+
+		agencyService.finalizeDemandAtTheNextTick("D3");
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1]\n" + "Queue: []", status);
+	}
+
+	@Test
+	@Transactional
+	public void fifo_competitionBetweenFourDemandsWithTwoAtendee() {
+		createAtendee(atendeeService, "A1");
+		createAtendee(atendeeService, "A2");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+		createDemand(demandService, "D4");
+
+		agencyService.increaseTick();
+		agencyService.increaseTick();
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1, A2->D2]\n" + "Queue: [D3, D4]", status);
+	}
+
+	@Test
+	@Transactional
+	public void fifo_removeDemandFromTheSecondAtendee() {
+		createAtendee(atendeeService, "A1");
+		createAtendee(atendeeService, "A2");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+		createDemand(demandService, "D4");
+
+		agencyService.increaseTick();
+		agencyService.finalizeDemandAtTheNextTick("D2");
+		agencyService.increaseTick();
+
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1, A2->D3]\n" + "Queue: [D4]", status);
+	}
+
+	@Test
+	@Transactional
+	public void fifo_removeDemandFromTheSecondAttendantLeavingTheFirstAtendeeWithADemand() {
+		createAtendee(atendeeService, "A1");
+		createAtendee(atendeeService, "A2");
+		createDemand(demandService, "D1");
+		createDemand(demandService, "D2");
+		createDemand(demandService, "D3");
+		createDemand(demandService, "D4");
+
+		agencyService.increaseTick();
+		String status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1, A2->D2]\n" + "Queue: [D3, D4]", status);
+
+		agencyService.finalizeDemandAtTheNextTick("D2");
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1, A2->D3]\n" + "Queue: [D4]", status);
+
+		agencyService.finalizeDemandAtTheNextTick("D3");
+		agencyService.increaseTick();
+		status = agencyService.getStatus();
+		assertEquals("Atendees: [A1->D1, A2->D4]\n" + "Queue: []", status);
 	}
 
 }
