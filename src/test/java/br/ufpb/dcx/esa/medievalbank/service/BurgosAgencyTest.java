@@ -78,7 +78,7 @@ public class BurgosAgencyTest {
 		
 	}
 
-
+	
 	@Test
 	@Transactional
 	public void agencyStatusAfterRemovingAnAtendee() {
