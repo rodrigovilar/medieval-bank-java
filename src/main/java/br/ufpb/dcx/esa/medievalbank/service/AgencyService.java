@@ -2,6 +2,8 @@ package br.ufpb.dcx.esa.medievalbank.service;
 
 import java.util.List;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +22,8 @@ public class AgencyService {
 	@Autowired
 	private DemandService demandService;
 
-	public DemandService getDemandService() {
-		return demandService;
-	}
+	private Logger logger;
 
-	public void setDemandService(DemandService demandService) {
-		this.demandService = demandService;
-	}
 
 	public void resetTick() {
 		this.tick = 0;
@@ -49,6 +46,30 @@ public class AgencyService {
 		}
 	}
 
+	public Atendee addAttendee(Atendee atendee) {
+		try {
+			this.logger.info("Trying to create attendee");
+			Atendee att = this.atendeeService.create(atendee);
+			this.logger.success("Attendee created");
+			return att;
+		} catch (MedievalBankException e) {
+			this.logger.error(e.getMessage());
+			throw e;
+		}
+	}
+
+	public void removeAttendee(Atendee atendee) {
+		this.atendeeService.delete(atendee);
+	}
+
+	public void createDemand(Demand demand) {
+		this.demandService.create(demand);
+	}
+
+	public void removeDemandOfTheAtendee(Demand demand) {
+		this.demandService.delete(demand);
+	}
+
 	public int getTick() {
 		return this.tick;
 	}
@@ -69,18 +90,35 @@ public class AgencyService {
 		return this.manager;
 	}
 
-	public void createDemand(Demand demand) {
-		this.demandService.create(demand);
+	public DemandService getDemandService() {
+		return demandService;
 	}
 
-	public void removeDemandOfTheAtendee(Demand demand) {
-		this.demandService.delete(demand);
+	public void setDemandService(DemandService demandService) {
+		this.demandService = demandService;
 	}
+
+	public void setAtendeeService(AtendeeService atendeeService) {
+		this.atendeeService = atendeeService;
+	}
+
+	public AtendeeService getAtendeeService() {
+		return atendeeService;
+	}
+
 
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
 
 		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
+	}
+
+    public void setLogger(Logger logger) {
+		this.logger = logger;
+    }
+
+	public Logger getLogger() {
+		return logger;
 	}
 }
