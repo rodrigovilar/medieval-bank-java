@@ -1,5 +1,6 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
@@ -16,6 +17,8 @@ public class AgencyService {
 	private String manager;
 	private int tick = 0;
 
+	List<Demand> demandsToBeFinalized;
+
 	@Autowired
 	private AtendeeService atendeeService;
 
@@ -24,13 +27,9 @@ public class AgencyService {
 
 	private Logger logger;
 
-
-	public void resetTick() {
-		this.tick = 0;
-	}
-
 	public void increaseTick() {
 		this.tick++;
+		this.finalizeDemand();
 		List<Demand> unllocatedDemands = this.demandService.getAllUnallocated();
 		List<Atendee> atendees = this.atendeeService.getAllAtendeesWithoutDemand();
 		for (Atendee atendee : atendees) {
@@ -44,6 +43,10 @@ public class AgencyService {
 				this.demandService.update(demand);
 			}
 		}
+	}
+
+	public void resetTick() {
+		this.tick = 0;
 	}
 
 	public Atendee addAttendee(Atendee atendee) {
@@ -68,6 +71,34 @@ public class AgencyService {
 
 	public void removeDemandOfTheAtendee(Demand demand) {
 		this.demandService.delete(demand);
+	}
+
+	public void finalizeDemandAtTheNextTick(String name) {
+		if (isNull(demandsToBeFinalized))
+			demandsToBeFinalized = new ArrayList<>();
+
+		Demand demand = this.demandService.getDemandByName(name);
+		demandsToBeFinalized.add(demand);
+	}
+
+	private void finalizeDemand() {
+		if (isNull(demandsToBeFinalized))
+			return;
+		for (Demand demand : demandsToBeFinalized) {
+			Atendee atendee = this.atendeeService.getAtendeeByDemandName(demand.getName());
+			if (!isNull(atendee)) {
+				atendee.setDemand(null);
+				demand.setAtendee(null);
+				this.atendeeService.update(atendee);
+				this.demandService.update(demand);
+			} else {
+				this.demandService.delete(demand);
+			}
+		}
+	}
+
+	private boolean isNull(Object object) {
+		return (object == null);
 	}
 
 	public int getTick() {
@@ -106,7 +137,6 @@ public class AgencyService {
 		return atendeeService;
 	}
 
-
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
@@ -114,9 +144,9 @@ public class AgencyService {
 		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
 	}
 
-    public void setLogger(Logger logger) {
+	public void setLogger(Logger logger) {
 		this.logger = logger;
-    }
+	}
 
 	public Logger getLogger() {
 		return logger;
