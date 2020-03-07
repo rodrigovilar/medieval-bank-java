@@ -14,8 +14,9 @@ public class UserService {
 	private UserRepository repository;
 	
 	public User create(User user) {
-		this.validateDuplicatedUsername(user);
 		this.validadeIsNullUsername(user);
+		this.validateIsNullPassword(user);
+		this.validateDuplicatedUsername(user);
 		return repository.save(user);
 	}
 	
@@ -32,6 +33,12 @@ public class UserService {
 	private void validadeIsNullUsername(User user) {
 		if(user.getUsername() == null) {
 			throw new MedievalBankException("Username is mandatory");
+		}
+	}
+	
+	private void validateIsNullPassword(User user) {
+		if(user.getPassword() == null) {
+			throw new MedievalBankException("Password is mandatory");
 		}
 	}
 	
