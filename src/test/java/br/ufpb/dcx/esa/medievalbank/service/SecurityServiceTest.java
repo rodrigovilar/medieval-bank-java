@@ -1,6 +1,7 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
 import static org.junit.Assert.assertEquals;
+import static br.ufpb.dcx.esa.medievalbank.service.SecurityServiceTestHelper.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,11 +24,22 @@ public class SecurityServiceTest {
 	
 	@Test
 	@Transactional
-	public void login() {
+	public void loginSuccessfully() {
 		User user = new User("ruaanc", "12345");
 		userService.create(user);
 		service.login("ruaanc", "12345");
 		assertEquals(user.isLogged(), true);
+	}
+	
+	@Test
+	@Transactional
+	public void loginUnsuccessfully() {
+		User user = new User("francisco", "12345");
+		userService.create(user);
+		String failMessage = "Test failed because the user was able to log in with the incorrect credentials.";
+		String expectedExceptionMessage = "Username or Password is incorrect";
+		tryLoginUnsuccessfully(service, "francisco", "123456", failMessage, expectedExceptionMessage);
+		tryLoginUnsuccessfully(service, "francis", "12345", failMessage, expectedExceptionMessage);
 	}
 
 }
