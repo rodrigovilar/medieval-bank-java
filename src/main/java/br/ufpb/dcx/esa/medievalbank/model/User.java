@@ -23,6 +23,9 @@ public class User implements Serializable {
 	@Column(name = "password")
 	private String password;
 	
+	@Column(name = "logged")
+	private boolean logged = false;
+	
 	public User() {
 	}
 
@@ -55,6 +58,14 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
+	public boolean isLogged() {
+		return logged;
+	}
+
+	public void setLogged(boolean logged) {
+		this.logged = logged;
+	}
+
 	@Override
 	public String toString() {
 		return this.username;
