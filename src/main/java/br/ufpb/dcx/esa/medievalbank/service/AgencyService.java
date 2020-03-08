@@ -50,12 +50,10 @@ public class AgencyService {
 		this.tick = 0;
 	}
 	
-	
+	@Secured("ROLE_MANAGER")
 	public Atendee addAttendee(Atendee atendee) {
 		try {
-			this.logger.info("Trying to create attendee");
 			Atendee att = this.atendeeService.create(atendee);
-			this.logger.success("Attendee created");
 			return att;
 		} catch (MedievalBankException e) {
 			this.logger.error(e.getMessage());
@@ -63,6 +61,7 @@ public class AgencyService {
 		}
 	}
 
+	@Secured("ROLE_MANAGER")
 	public void removeAttendee(Atendee atendee) {
 		this.atendeeService.delete(atendee);
 	}

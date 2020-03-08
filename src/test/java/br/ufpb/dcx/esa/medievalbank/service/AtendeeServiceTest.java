@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,6 @@ public class AtendeeServiceTest {
 	private AtendeeService service;
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t01_createAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
@@ -53,7 +51,6 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t02_createAtendeeWithoutName() {
 		Atendee atendee = new Atendee();
@@ -63,7 +60,6 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t03_atendeeNameDuplicated() {
 		createAtendee(service, EXAMPLE_NAME);
@@ -77,7 +73,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t04_createAtendeeWithAutomaticFields() {
 		Atendee atendee = new Atendee();
@@ -98,7 +93,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t05_createAtendeeWithInvalidEmail() {
 		Atendee atendee = new Atendee();
@@ -121,7 +115,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t06_updateAtendee() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
@@ -141,7 +134,6 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t07_updateAtendeeWithImmutableFields() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
@@ -161,7 +153,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t08_updateAtendeeWithUnknownId()  {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
@@ -181,7 +172,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t09_updateAtendeeWithoutName() {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
@@ -193,7 +183,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t10_updateAtendeeWithDuplicatedName() {
 		createAtendee(service, EXAMPLE_NAME);
@@ -211,7 +200,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t11_updateAtendeeWithAutomaticField() throws Exception {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME);
@@ -231,7 +219,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t12_updateAtendeeWithInvalidEmail() {
 		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
@@ -254,7 +241,6 @@ public class AtendeeServiceTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t13_deleteAtendee() {
 		Atendee atendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
@@ -267,7 +253,6 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t14_deleteUnknownAtendee() {
 		Atendee atendee = new Atendee();
@@ -284,7 +269,6 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t15_threeAtendees() {
 		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
@@ -299,7 +283,6 @@ public class AtendeeServiceTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void t16_filterAtendees() {
 		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
