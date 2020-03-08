@@ -26,6 +26,7 @@ public class BurgosAgencyTest {
 	private DemandService demandService;
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	public void initialConfiguration() {
 
 		agencyService.setName("Burgosland");

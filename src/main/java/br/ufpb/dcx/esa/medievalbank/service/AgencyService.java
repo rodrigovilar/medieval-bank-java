@@ -105,7 +105,8 @@ public class AgencyService {
 	public int getTick() {
 		return this.tick;
 	}
-
+	
+	@Secured("ROLE_MANAGER")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -113,7 +114,8 @@ public class AgencyService {
 	public String getName() {
 		return this.name;
 	}
-
+	
+	@Secured("ROLE_MANAGER")
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
