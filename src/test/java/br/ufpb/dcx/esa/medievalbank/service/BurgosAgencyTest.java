@@ -38,6 +38,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	public void agencyStatusWhithoutAtendee() {
 		String result = agencyService.getStatus();
 		assertEquals("Atendees: []\n" + "Queue: []", result);
@@ -67,6 +68,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	@Transactional
 	public void agencyStatusWithOneDemand() {
 		createDemand(demandService, "D1");
@@ -75,7 +77,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "SYSTEM" })
+	@WithMockUser(username = "john", roles = { "SYSTEM", "MANAGER" })
 	@Transactional
 	public void agencyStatusWithTickAndQueue() {
 		createDemand(demandService, "D1");
@@ -100,7 +102,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "SYSTEM" })
+	@WithMockUser(username = "john", roles = { "SYSTEM", "MANAGER" })
 	@Transactional
 	public void agencyStatusWithTick() {
 

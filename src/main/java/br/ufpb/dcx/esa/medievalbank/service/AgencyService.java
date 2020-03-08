@@ -71,6 +71,7 @@ public class AgencyService {
 		this.demandService.create(demand);
 	}
 
+	@Secured("ROLE_MANAGER")
 	public void removeDemandOfTheAtendee(Demand demand) {
 		this.demandService.delete(demand);
 	}
@@ -142,6 +143,7 @@ public class AgencyService {
 		return atendeeService;
 	}
 
+	@Secured("ROLE_MANAGER")
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
