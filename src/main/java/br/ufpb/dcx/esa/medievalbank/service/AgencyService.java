@@ -28,6 +28,7 @@ public class AgencyService {
 
 	private Logger logger;
 
+	@Secured("ROLE_SYSTEM")
 	public void increaseTick() {
 		this.tick++;
 		this.finalizeDemand();
