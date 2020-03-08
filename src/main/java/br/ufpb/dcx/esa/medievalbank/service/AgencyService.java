@@ -75,6 +75,7 @@ public class AgencyService {
 		this.demandService.delete(demand);
 	}
 
+	@Secured("ROLE_ATENDEE")
 	public void finalizeDemandAtTheNextTick(String name) {
 		if (isNull(demandsToBeFinalized))
 			demandsToBeFinalized = new ArrayList<>();

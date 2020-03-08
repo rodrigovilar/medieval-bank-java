@@ -142,7 +142,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_competitionBetweenTwoDemands() {
 		addAtendee(agencyService, "A1");
@@ -160,7 +160,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_competitionBetweenDemandsFromDifferentStart() {
 		addAtendee(agencyService, "A1");
@@ -179,7 +179,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_finalizeDemandInQueue() {
 		addAtendee(agencyService, "A1");
@@ -216,7 +216,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_removeDemandFromTheSecondAtendee() {
 		addAtendee(agencyService, "A1");
@@ -235,7 +235,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
-	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_removeDemandFromTheSecondAttendantLeavingTheFirstAtendeeWithADemand() {
 		addAtendee(agencyService, "A1");
