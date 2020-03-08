@@ -3,13 +3,14 @@ package br.ufpb.dcx.esa.medievalbank.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
-import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 
 @Service
 public class AgencyService {
@@ -48,7 +49,8 @@ public class AgencyService {
 	public void resetTick() {
 		this.tick = 0;
 	}
-
+	
+	
 	public Atendee addAttendee(Atendee atendee) {
 		try {
 			this.logger.info("Trying to create attendee");

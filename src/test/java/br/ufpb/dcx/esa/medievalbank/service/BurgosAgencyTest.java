@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void agencyStatusWithOneAtendee() {
 
@@ -56,6 +58,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void agencyStatusWithThreeAtendees() {
 		createAtendee(atendeeService, "A1");
@@ -120,6 +123,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void agencyStatusWithTick_QueueAndAtendee() {
 
@@ -139,6 +143,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void fifo_competitionBetweenTwoDemands() {
 		createAtendee(atendeeService, "A1");
@@ -156,6 +161,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void fifo_competitionBetweenDemandsFromDifferentStart() {
 		createAtendee(atendeeService, "A1");
@@ -174,6 +180,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void fifo_finalizeDemandInQueue() {
 		createAtendee(atendeeService, "A1");
@@ -193,6 +200,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void fifo_competitionBetweenFourDemandsWithTwoAtendee() {
 		createAtendee(atendeeService, "A1");
@@ -209,6 +217,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void fifo_removeDemandFromTheSecondAtendee() {
 		createAtendee(atendeeService, "A1");
@@ -227,6 +236,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "GERENTE" })
 	@Transactional
 	public void fifo_removeDemandFromTheSecondAttendantLeavingTheFirstAtendeeWithADemand() {
 		createAtendee(atendeeService, "A1");

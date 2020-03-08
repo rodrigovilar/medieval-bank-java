@@ -8,6 +8,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
@@ -27,6 +28,7 @@ public class AtendeeService {
 		return matcher.matches();
 	}
 
+	@Secured("ROLE_GERENTE")
 	public Atendee create(Atendee atendee) {
 
 		if (atendee.getName() == null)
@@ -131,6 +133,7 @@ public class AtendeeService {
 
 	}
 
+	@Secured("ROLE_GERENTE")
 	public void delete(Atendee atendee) {
 		if (atendee == null) {
 			throw new MedievalBankException("Null atendee");
