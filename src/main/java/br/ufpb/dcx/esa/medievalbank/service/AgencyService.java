@@ -11,6 +11,7 @@ import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
 import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.LoggingMock;
 
 @Service
 public class AgencyService {
@@ -26,7 +27,7 @@ public class AgencyService {
 	@Autowired
 	private DemandService demandService;
 
-	private Logger logger;
+	private Logger logger = new LoggingMock();
 
 	@Secured("ROLE_SYSTEM")
 	public void increaseTick() {
@@ -54,7 +55,9 @@ public class AgencyService {
 	@Secured("ROLE_MANAGER")
 	public Atendee addAttendee(Atendee atendee) {
 		try {
+			this.logger.info("Trying to create attendee");
 			Atendee att = this.atendeeService.create(atendee);
+			this.logger.success("Attendee created");
 			return att;
 		} catch (MedievalBankException e) {
 			this.logger.error(e.getMessage());
