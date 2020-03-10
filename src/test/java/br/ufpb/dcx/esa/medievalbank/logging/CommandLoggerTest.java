@@ -64,7 +64,6 @@ public class CommandLoggerTest {
         attendee.setName("A1");
         attendee.setEmail("a@mail.com");
         Command insertAttendee = new InsertAttendee(attendee);
-        insertAttendee.setAgencyService(agencyService);
         try {
             this.agencyService.execute(insertAttendee);
         } catch (Exception e) {

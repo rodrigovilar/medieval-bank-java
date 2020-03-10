@@ -26,6 +26,7 @@ public class AgencyService {
 	private Logger logger;
 
 	public void execute(Command command){
+		command.setAgencyService(this);
 		this.logger.trace(String.format("Executing %s", command.getDescription()));
 		try {
 			command.execute();
