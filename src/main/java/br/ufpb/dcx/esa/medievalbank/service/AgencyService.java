@@ -3,6 +3,9 @@ package br.ufpb.dcx.esa.medievalbank.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
+import br.ufpb.dcx.esa.medievalbank.command.Command;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,18 @@ public class AgencyService {
 	private DemandService demandService;
 
 	private Logger logger = new LoggingMock();
+
+	public void execute(Command command){
+		command.setAgencyService(this);
+		this.logger.trace(String.format("Executing %s", command.getDescription()));
+		try {
+			command.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.logger.error(String.format("Error executing %s, exception message was %s", command.getDescription(), e.getMessage()));
+		}
+		this.logger.trace(String.format("Executed %s", command.getDescription()));
+	}
 
 	@Secured("ROLE_SYSTEM")
 	public void increaseTick() {
@@ -55,23 +70,24 @@ public class AgencyService {
 	@Secured("ROLE_MANAGER")
 	public Atendee addAttendee(Atendee atendee) {
 		try {
-			this.logger.info("Trying to create attendee");
 			Atendee att = this.atendeeService.create(atendee);
-			this.logger.success("Attendee created");
 			return att;
 		} catch (MedievalBankException e) {
-			this.logger.error(e.getMessage());
 			throw e;
 		}
 	}
 
 	@Secured("ROLE_MANAGER")
 	public void removeAttendee(Atendee atendee) {
-		this.atendeeService.delete(atendee);
+		try {
+			this.atendeeService.delete(atendee);
+		} catch (Exception e){
+			throw e;
+		}
 	}
 
-	public void createDemand(Demand demand) {
-		this.demandService.create(demand);
+	public Demand createDemand(Demand demand) {
+		return this.demandService.create(demand);
 	}
 
 	@Secured("ROLE_MANAGER")
@@ -161,4 +177,8 @@ public class AgencyService {
 	public Logger getLogger() {
 		return logger;
 	}
+
+    public void removeDemand(Demand demand) {
+		this.demandService.delete(demand);
+    }
 }
