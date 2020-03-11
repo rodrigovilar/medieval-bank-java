@@ -42,4 +42,16 @@ public class UserService {
 		}
 	}
 	
+	public boolean getExistsUsername(String username) {
+		return repository.existsByUsername(username);
+	}
+	
+	public boolean getExistsPassword(String password) {
+		return repository.existsByPassword(password);
+	}
+	
+	public User getUserByUsername(String username) {
+		return repository.findByUsername(username);
+	}
+	
 }

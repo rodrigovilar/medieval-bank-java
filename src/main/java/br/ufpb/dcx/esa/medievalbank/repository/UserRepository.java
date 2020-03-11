@@ -7,4 +7,8 @@ import br.ufpb.dcx.esa.medievalbank.model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	Boolean existsByUsername(String username);
+	
+	Boolean existsByPassword(String password);
+	
+	User findByUsername(String  username);
 }
