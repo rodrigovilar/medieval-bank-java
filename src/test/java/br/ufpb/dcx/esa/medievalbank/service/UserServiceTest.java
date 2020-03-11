@@ -46,5 +46,14 @@ public class UserServiceTest {
 		String expectedExceptionMessage = "Username is mandatory";
 		tryCreateUserWithError(userService, user, failMessage, expectedExceptionMessage);
 	}
+	
+	@Test
+	@Transactional
+	public void createUserWithoutPassword() {
+		User user = new User("igorc", null);
+		String failMessage = "Test failed because the created user has null password.";
+		String expectedExceptionMessage = "Password is mandatory";
+		tryCreateUserWithError(userService, user, failMessage, expectedExceptionMessage);
+	}
 
 }
