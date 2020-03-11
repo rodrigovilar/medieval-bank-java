@@ -1,15 +1,20 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.command.Command;
 import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.LoggingMock;
 
 @Service
 public class AgencyService {
@@ -17,13 +22,15 @@ public class AgencyService {
 	private String manager;
 	private int tick = 0;
 
+	List<Demand> demandsToBeFinalized;
+
 	@Autowired
 	private AtendeeService atendeeService;
 
 	@Autowired
 	private DemandService demandService;
 
-	private Logger logger;
+	private Logger logger = new LoggingMock();
 
 	public void execute(Command command){
 		command.setAgencyService(this);
@@ -37,13 +44,10 @@ public class AgencyService {
 		this.logger.trace(String.format("Executed %s", command.getDescription()));
 	}
 
-
-	public void resetTick() {
-		this.tick = 0;
-	}
-
+	@Secured("ROLE_SYSTEM")
 	public void increaseTick() {
 		this.tick++;
+		this.finalizeDemand();
 		List<Demand> unllocatedDemands = this.demandService.getAllUnallocated();
 		List<Atendee> atendees = this.atendeeService.getAllAtendeesWithoutDemand();
 		for (Atendee atendee : atendees) {
@@ -59,6 +63,11 @@ public class AgencyService {
 		}
 	}
 
+	public void resetTick() {
+		this.tick = 0;
+	}
+	
+	@Secured("ROLE_MANAGER")
 	public Atendee addAttendee(Atendee atendee) {
 		try {
 			Atendee att = this.atendeeService.create(atendee);
@@ -68,13 +77,11 @@ public class AgencyService {
 		}
 	}
 
+	@Secured("ROLE_MANAGER")
 	public void removeAttendee(Atendee atendee) {
 		try {
-			this.logger.info("Trying to delete attendee");
 			this.atendeeService.delete(atendee);
-			this.logger.success("Attendee deleted");
 		} catch (Exception e){
-			this.logger.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -83,14 +90,45 @@ public class AgencyService {
 		return this.demandService.create(demand);
 	}
 
+	@Secured("ROLE_MANAGER")
 	public void removeDemandOfTheAtendee(Demand demand) {
 		this.demandService.delete(demand);
+	}
+
+	@Secured("ROLE_ATENDEE")
+	public void finalizeDemandAtTheNextTick(String name) {
+		if (isNull(demandsToBeFinalized))
+			demandsToBeFinalized = new ArrayList<>();
+
+		Demand demand = this.demandService.getDemandByName(name);
+		demandsToBeFinalized.add(demand);
+	}
+
+	private void finalizeDemand() {
+		if (isNull(demandsToBeFinalized))
+			return;
+		for (Demand demand : demandsToBeFinalized) {
+			Atendee atendee = this.atendeeService.getAtendeeByDemandName(demand.getName());
+			if (!isNull(atendee)) {
+				atendee.setDemand(null);
+				demand.setAtendee(null);
+				this.atendeeService.update(atendee);
+				this.demandService.update(demand);
+			} else {
+				this.demandService.delete(demand);
+			}
+		}
+	}
+
+	private boolean isNull(Object object) {
+		return (object == null);
 	}
 
 	public int getTick() {
 		return this.tick;
 	}
-
+	
+	@Secured("ROLE_MANAGER")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -98,7 +136,8 @@ public class AgencyService {
 	public String getName() {
 		return this.name;
 	}
-
+	
+	@Secured("ROLE_MANAGER")
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
@@ -123,7 +162,7 @@ public class AgencyService {
 		return atendeeService;
 	}
 
-
+	@Secured("ROLE_MANAGER")
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
@@ -131,9 +170,9 @@ public class AgencyService {
 		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
 	}
 
-    public void setLogger(Logger logger) {
+	public void setLogger(Logger logger) {
 		this.logger = logger;
-    }
+	}
 
 	public Logger getLogger() {
 		return logger;

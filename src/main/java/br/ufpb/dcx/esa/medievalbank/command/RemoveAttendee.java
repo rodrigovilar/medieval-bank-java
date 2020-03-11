@@ -13,7 +13,7 @@ public class RemoveAttendee extends Command {
 
     @Override
     public String getDescription() {
-        return "delete attendee";
+        return "remove attendee";
     }
 
     @Override

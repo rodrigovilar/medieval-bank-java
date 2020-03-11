@@ -27,6 +27,7 @@ public class AtendeeService {
 		return matcher.matches();
 	}
 
+	
 	public Atendee create(Atendee atendee) {
 
 		if (atendee.getName() == null)
@@ -88,6 +89,10 @@ public class AtendeeService {
 
 	public List<Atendee> getAll() {
 		return repository.findAll();
+	}
+
+	public Atendee getAtendeeByDemandName(String name) {
+		return this.repository.findByDemandName(name);
 	}
 
 	public List<Atendee> getAllAtendeesWithoutDemand() {

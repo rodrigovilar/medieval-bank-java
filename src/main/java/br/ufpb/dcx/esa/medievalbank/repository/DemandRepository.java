@@ -9,4 +9,5 @@ import br.ufpb.dcx.esa.medievalbank.model.Demand;
 public interface DemandRepository extends JpaRepository<Demand, Integer> {
 
     public List<Demand> findByAllocatedFalse();
+    public Demand findByName(String name);
 }

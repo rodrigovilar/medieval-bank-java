@@ -1,7 +1,12 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.createAtendee;
+import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.tryCreateAtendeeWithError;
+import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.tryDeleteAtendeeWithError;
+import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.tryGetOneAtendeeWithError;
+import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.tryUpdateAtendeeWithError;
+import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.validateAtendee;
 import static org.junit.Assert.assertEquals;
-import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
 
 import java.util.Date;
 import java.util.List;
@@ -10,12 +15,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 
 @RunWith(SpringRunner.class)
+@ContextConfiguration
 @SpringBootTest
 public class AtendeeServiceTest {
 	
@@ -147,7 +154,7 @@ public class AtendeeServiceTest {
 	
 	@Test
 	@Transactional
-	public void t08_updateAtendeeWithUnknownId() {
+	public void t08_updateAtendeeWithUnknownId()  {
 		Atendee createdAtendee = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 		Atendee newAtendee = new Atendee();
 		newAtendee.setCreation(createdAtendee.getCreation());

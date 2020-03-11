@@ -3,6 +3,7 @@ package br.ufpb.dcx.esa.medievalbank.logging;
 
 import br.ufpb.dcx.esa.medievalbank.command.Command;
 import br.ufpb.dcx.esa.medievalbank.command.InsertAttendee;
+import br.ufpb.dcx.esa.medievalbank.command.RemoveAttendee;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.service.AgencyService;
 import br.ufpb.dcx.esa.medievalbank.service.AtendeeService;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -27,11 +31,6 @@ public class CommandLoggerTest {
 
     @Autowired
     private AgencyService agencyService;
-    @Autowired
-    private AtendeeService atendeeService;
-    @Autowired
-    private DemandService demandService;
-
     private Logger logger;
 
     @Before
@@ -57,13 +56,33 @@ public class CommandLoggerTest {
         assertTrue(log.equals(String.format("INFO: %s", value)));
     }
 
+    public Atendee builAttendee(String name, String email) {
+        Atendee att = new Atendee();
+        att.setName(name);
+        att.setEmail(email);
+        return att;
+    }
+
+    public Atendee insertSingleAttendee(Atendee attendee) {
+        Command insertAttendee = new InsertAttendee(attendee);
+        try {
+            this.agencyService.execute(insertAttendee);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+        return attendee;
+    }
+
+    public void insertMultipleAttendess(List<Atendee> attendees) {
+        int index = 1;
+        for(Atendee i: attendees) {
+            insertSingleAttendee(builAttendee("A" + index++, "a@mail.com"));
+        }
+    }
+
     @Test
     public void t052_successfulAttendeeCreationLogs() {
-        this.agencyService.setLogger(logger);
-        Atendee attendee = new Atendee();
-        attendee.setName("A1");
-        attendee.setEmail("a@mail.com");
-        Command insertAttendee = new InsertAttendee(attendee);
+        Command insertAttendee = new InsertAttendee(builAttendee("A1", "a@mail.com"));
         try {
             this.agencyService.execute(insertAttendee);
         } catch (Exception e) {
@@ -77,6 +96,37 @@ public class CommandLoggerTest {
 
         assertTraceLog(beforeMethod, logs.get(0));
         assertTraceLog(afterMethod, logs.get(1));
+
+    }
+
+    @Test
+    public void t053_SuccesfullyRemoveAttendeeWithLogs() {
+        /*
+        Atendee att = insertSingleAttendee(builAttendee("A1", "a@a.com"));
+
+        Command removeAttendee = new RemoveAttendee(att);
+        try {
+            this.agencyService.execute(removeAttendee);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+        String beforeMethod = "Executing remove attendee";
+        String afterMethod = "Executed remove attendee";
+
+        List<String> logs = this.agencyService.getLogger().getLogs();
+
+        assertTraceLog(beforeMethod, logs.get(0));
+        assertTraceLog(afterMethod, logs.get(1));
+         */
+    }
+
+    @Test
+    public void t054_AddAttendeeAndLogExceptions(){
+
+    }
+
+    @Test
+    public void t055_RemoveAttendeeAndLogExceptions() {
 
     }
 
