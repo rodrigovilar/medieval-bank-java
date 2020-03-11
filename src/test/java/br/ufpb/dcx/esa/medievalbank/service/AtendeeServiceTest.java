@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -270,6 +271,7 @@ public class AtendeeServiceTest {
 
 	@Test
 	@Transactional
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	public void t15_threeAtendees() {
 		Atendee atendee1 = createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
 		Atendee atendee2 = createAtendee(service, OTHER_NAME);

@@ -15,7 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -81,6 +83,8 @@ public class CommandLoggerTest {
     }
 
     @Test
+    @Transactional
+    @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t052_successfulAttendeeCreationLogs() {
         Command insertAttendee = new InsertAttendee(builAttendee("A1", "a@mail.com"));
         try {
@@ -100,6 +104,8 @@ public class CommandLoggerTest {
     }
 
     @Test
+    @Transactional
+    @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t053_SuccesfullyRemoveAttendeeWithLogs() {
         /*
         Atendee att = insertSingleAttendee(builAttendee("A1", "a@a.com"));
@@ -121,11 +127,15 @@ public class CommandLoggerTest {
     }
 
     @Test
+    @Transactional
+    @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t054_AddAttendeeAndLogExceptions(){
 
     }
 
     @Test
+    @Transactional
+    @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t055_RemoveAttendeeAndLogExceptions() {
 
     }
