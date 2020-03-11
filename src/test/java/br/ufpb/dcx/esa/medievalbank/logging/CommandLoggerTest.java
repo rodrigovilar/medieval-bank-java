@@ -49,20 +49,29 @@ public class CommandLoggerTest {
         return att;
     }
 
-    public Atendee insertSingleAttendee(Atendee attendee) {
+    public Atendee insertSingleAttendee(Atendee attendee, boolean shouldFail) {
         Command insertAttendee = new InsertAttendee(attendee);
         try {
             this.agencyService.execute(insertAttendee);
         } catch (Exception e) {
-            fail(e.getMessage());
+            if(shouldFail) fail(e.getMessage()); else throw e;
         }
         return attendee;
     }
 
-    public void insertMultipleAttendess(List<Atendee> attendees) {
+    private void removeSingleAttendee(Atendee att, boolean shouldFail) {
+        Command removeAttendee = new RemoveAttendee(att);
+        try {
+            this.agencyService.execute(removeAttendee);
+        } catch (Exception e) {
+            if(shouldFail) fail(e.getMessage()); else throw e;
+        }
+    }
+
+    public void insertMultipleAttendess(List<Atendee> attendees, boolean shouldFail) {
         int index = 1;
         for(Atendee i: attendees) {
-            insertSingleAttendee(builAttendee("A" + index++, "a@mail.com"));
+            insertSingleAttendee(builAttendee("A" + index++, "a@mail.com"), shouldFail);
         }
     }
 
@@ -77,12 +86,7 @@ public class CommandLoggerTest {
     @Transactional
     @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t052_successfulAttendeeCreationLogs() {
-        Command insertAttendee = new InsertAttendee(builAttendee("A1", "a@mail.com"));
-        try {
-            this.agencyService.execute(insertAttendee);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        insertSingleAttendee(builAttendee("A1", "a@mail.com"), true);
 
         String beforeMethod = "TRACE: Executing insert attendee";
         String afterMethod = "TRACE: Executed insert attendee";
@@ -96,14 +100,10 @@ public class CommandLoggerTest {
     @Transactional
     @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t053_SuccesfullyRemoveAttendeeWithLogs() {
-        Atendee att = insertSingleAttendee(builAttendee("A1", "a@a.com"));
+        Atendee att = insertSingleAttendee(builAttendee("A1", "a@a.com"), true);
 
-        Command removeAttendee = new RemoveAttendee(att);
-        try {
-            this.agencyService.execute(removeAttendee);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        removeSingleAttendee(att, true);
+
         String beforeMethod = "TRACE: Executing remove attendee";
         String afterMethod = "TRACE: Executed remove attendee";
 
@@ -111,10 +111,21 @@ public class CommandLoggerTest {
         assertTrue(isLogInLogs(afterMethod));
     }
 
+
     @Test
     @Transactional
     @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t054_AddAttendeeAndLogExceptions(){
+        try {
+            insertSingleAttendee(builAttendee(null, null), false);
+            fail("Should throw exception");
+        } catch (Exception e) {
+
+        }
+
+        String errorLog = "ERROR: Error executing insert attendee, exception message was Name is mandatory";
+        assertTrue(isLogInLogs(errorLog));
+
 
     }
 
