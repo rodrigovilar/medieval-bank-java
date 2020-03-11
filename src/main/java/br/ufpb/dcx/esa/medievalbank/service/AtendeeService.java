@@ -27,6 +27,7 @@ public class AtendeeService {
 		return matcher.matches();
 	}
 
+	
 	public Atendee create(Atendee atendee) {
 
 		if (atendee.getName() == null)

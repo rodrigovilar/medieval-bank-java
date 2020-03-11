@@ -3,13 +3,15 @@ package br.ufpb.dcx.esa.medievalbank.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
-import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
+import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
+import br.ufpb.dcx.esa.medievalbank.utils.logging.LoggingMock;
 
 @Service
 public class AgencyService {
@@ -25,8 +27,9 @@ public class AgencyService {
 	@Autowired
 	private DemandService demandService;
 
-	private Logger logger;
+	private Logger logger = new LoggingMock();
 
+	@Secured("ROLE_SYSTEM")
 	public void increaseTick() {
 		this.tick++;
 		this.finalizeDemand();
@@ -48,7 +51,8 @@ public class AgencyService {
 	public void resetTick() {
 		this.tick = 0;
 	}
-
+	
+	@Secured("ROLE_MANAGER")
 	public Atendee addAttendee(Atendee atendee) {
 		try {
 			this.logger.info("Trying to create attendee");
@@ -61,6 +65,7 @@ public class AgencyService {
 		}
 	}
 
+	@Secured("ROLE_MANAGER")
 	public void removeAttendee(Atendee atendee) {
 		this.atendeeService.delete(atendee);
 	}
@@ -69,10 +74,12 @@ public class AgencyService {
 		this.demandService.create(demand);
 	}
 
+	@Secured("ROLE_MANAGER")
 	public void removeDemandOfTheAtendee(Demand demand) {
 		this.demandService.delete(demand);
 	}
 
+	@Secured("ROLE_ATENDEE")
 	public void finalizeDemandAtTheNextTick(String name) {
 		if (isNull(demandsToBeFinalized))
 			demandsToBeFinalized = new ArrayList<>();
@@ -104,7 +111,8 @@ public class AgencyService {
 	public int getTick() {
 		return this.tick;
 	}
-
+	
+	@Secured("ROLE_MANAGER")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -112,7 +120,8 @@ public class AgencyService {
 	public String getName() {
 		return this.name;
 	}
-
+	
+	@Secured("ROLE_MANAGER")
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
@@ -137,6 +146,7 @@ public class AgencyService {
 		return atendeeService;
 	}
 
+	@Secured("ROLE_MANAGER")
 	public String getStatus() {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();

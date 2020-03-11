@@ -1,6 +1,7 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
 import static org.junit.Assert.assertEquals;
+
 import static br.ufpb.dcx.esa.medievalbank.service.UserServiceTestHelper.*;
 
 import org.junit.Test;

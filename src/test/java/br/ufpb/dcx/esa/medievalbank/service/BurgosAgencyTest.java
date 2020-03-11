@@ -1,17 +1,18 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
+import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.createDemand;
+import static br.ufpb.dcx.esa.medievalbank.service.AgencyServiceTestHelper.*;
 import static org.junit.Assert.assertEquals;
-
-import static br.ufpb.dcx.esa.medievalbank.service.AtendeeServiceTestHelper.*;
-import static br.ufpb.dcx.esa.medievalbank.service.DemandServiceTestHelper.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @RunWith(SpringRunner.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -22,12 +23,10 @@ public class BurgosAgencyTest {
 	private AgencyService agencyService;
 
 	@Autowired
-	private AtendeeService atendeeService;
-
-	@Autowired
 	private DemandService demandService;
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	public void initialConfiguration() {
 
 		agencyService.setName("Burgosland");
@@ -39,6 +38,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	public void agencyStatusWhithoutAtendee() {
 		String result = agencyService.getStatus();
 		assertEquals("Atendees: []\n" + "Queue: []", result);
@@ -46,27 +46,29 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	@Transactional
 	public void agencyStatusWithOneAtendee() {
-
-		createAtendee(atendeeService, "A1");
+		addAtendee(agencyService, "A1");
 		String result = agencyService.getStatus();
 		assertEquals("Atendees: [A1]\n" + "Queue: []", result);
 
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	@Transactional
 	public void agencyStatusWithThreeAtendees() {
-		createAtendee(atendeeService, "A1");
-		createAtendee(atendeeService, "A2");
-		createAtendee(atendeeService, "A3");
+		addAtendee(agencyService, "A1");
+		addAtendee(agencyService, "A2");
+		addAtendee(agencyService, "A3");
 		String result = agencyService.getStatus();
 		assertEquals("Atendees: [A1, A2, A3]\n" + "Queue: []", result);
 
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
 	@Transactional
 	public void agencyStatusWithOneDemand() {
 		createDemand(demandService, "D1");
@@ -75,6 +77,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "SYSTEM", "MANAGER" })
 	@Transactional
 	public void agencyStatusWithTickAndQueue() {
 		createDemand(demandService, "D1");
@@ -99,6 +102,7 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "SYSTEM", "MANAGER" })
 	@Transactional
 	public void agencyStatusWithTick() {
 
@@ -120,10 +124,11 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
 	@Transactional
 	public void agencyStatusWithTick_QueueAndAtendee() {
 
-		createAtendee(atendeeService, "A1");
+		addAtendee(agencyService, "A1");
 		createDemand(demandService, "D1");
 
 		String status = agencyService.getStatus();
@@ -139,9 +144,10 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_competitionBetweenTwoDemands() {
-		createAtendee(atendeeService, "A1");
+		addAtendee(agencyService, "A1");
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 
@@ -156,9 +162,10 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_competitionBetweenDemandsFromDifferentStart() {
-		createAtendee(atendeeService, "A1");
+		addAtendee(agencyService, "A1");
 		createDemand(demandService, "D1");
 
 		AgencyServiceTestHelper.increaseTick(agencyService, 2);
@@ -174,9 +181,10 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_finalizeDemandInQueue() {
-		createAtendee(atendeeService, "A1");
+		addAtendee(agencyService, "A1");
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
@@ -193,10 +201,11 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
 	@Transactional
 	public void fifo_competitionBetweenFourDemandsWithTwoAtendee() {
-		createAtendee(atendeeService, "A1");
-		createAtendee(atendeeService, "A2");
+		addAtendee(agencyService, "A1");
+		addAtendee(agencyService, "A2");
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
@@ -209,10 +218,11 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_removeDemandFromTheSecondAtendee() {
-		createAtendee(atendeeService, "A1");
-		createAtendee(atendeeService, "A2");
+		addAtendee(agencyService, "A1");
+		addAtendee(agencyService, "A2");
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
@@ -227,10 +237,11 @@ public class BurgosAgencyTest {
 	}
 
 	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM", "ATENDEE" })
 	@Transactional
 	public void fifo_removeDemandFromTheSecondAttendantLeavingTheFirstAtendeeWithADemand() {
-		createAtendee(atendeeService, "A1");
-		createAtendee(atendeeService, "A2");
+		addAtendee(agencyService, "A1");
+		addAtendee(agencyService, "A2");
 		createDemand(demandService, "D1");
 		createDemand(demandService, "D2");
 		createDemand(demandService, "D3");
