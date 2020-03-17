@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,14 @@ public class SecurityServiceTest {
 		String expectedExceptionMessage = "Username or Password is incorrect";
 		tryLoginUnsuccessfully(service, "francisco", "123456", failMessage, expectedExceptionMessage);
 		tryLoginUnsuccessfully(service, "francis", "12345", failMessage, expectedExceptionMessage);
+	}
+	
+	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER", "SYSTEM" })
+	@Transactional
+	public void rolePermissionSuccessfully() {
+		
+		System.out.println(userService.getRoles().toString());
 	}
 
 }

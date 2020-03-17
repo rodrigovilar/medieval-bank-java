@@ -19,4 +19,10 @@ public class InsertDemand extends Command {
     public Object execute() {
         return getAgencyService().createDemand(this.demand);
     }
+
+	@Override
+	public String getPermission() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -20,4 +20,10 @@ public class RemoveDemand extends Command {
         getAgencyService().removeDemand(this.demand);
         return null;
     }
+
+	@Override
+	public String getPermission() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

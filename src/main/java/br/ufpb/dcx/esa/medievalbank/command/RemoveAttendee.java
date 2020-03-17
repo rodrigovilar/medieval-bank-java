@@ -21,4 +21,10 @@ public class RemoveAttendee extends Command {
         getAgencyService().removeAttendee(this.attendee);
         return null;
     }
+
+	@Override
+	public String getPermission() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

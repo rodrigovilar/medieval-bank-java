@@ -8,6 +8,7 @@ public abstract class Command {
 
     public abstract String getDescription();
     public abstract Object execute();
+    public abstract String getPermission();
 
     public void setAgencyService(AgencyService agencyService) {
         this.agencyService = agencyService;

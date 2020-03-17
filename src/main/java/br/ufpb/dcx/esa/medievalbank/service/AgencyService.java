@@ -33,6 +33,9 @@ public class AgencyService {
 	private Logger logger = new LoggingMock();
 
 	public void execute(Command command){
+		
+		String permission =  command.getPermission();
+		
 		command.setAgencyService(this);
 		this.logger.trace(String.format("Executing %s", command.getDescription()));
 		try {

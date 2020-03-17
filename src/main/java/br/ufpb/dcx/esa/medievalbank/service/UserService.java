@@ -1,9 +1,6 @@
 package br.ufpb.dcx.esa.medievalbank.service;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -59,9 +56,9 @@ public class UserService {
 		return repository.findByUsername(username);
 	}
 	
-	public Collection<? extends GrantedAuthority> getRoles() {
+	public String getRoles() {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
-		return securityContext.getAuthentication().getAuthorities();
+		return securityContext.getAuthentication().getAuthorities().toString();
 	}
 	
 }
