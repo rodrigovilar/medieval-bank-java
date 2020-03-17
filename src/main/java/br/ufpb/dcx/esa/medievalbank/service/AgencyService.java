@@ -16,6 +16,7 @@ public class AgencyService {
 	private String name;
 	private String manager;
 	private int tick = 0;
+	private int quantum = 3;
 
 	List<Demand> demandsToBeFinalized;
 
@@ -68,17 +69,23 @@ public class AgencyService {
 	public void createDemand(Demand demand) {
 		this.demandService.create(demand);
 	}
+	
+	/*
+	 * public void removeDemandOfTheAtendee(String D) { Atendee atendee =
+	 * atendeeService.getAtendeeByDemandName(D); Demand demand = new Demand();
+	 * demand = atendee.getDemand(); finalizeDemandAtTheNextTick(D); //List<Demand>
+	 * demandasFinalizadas = this.demandasFinalizas; this.createDemand(demand);
+	 * 
+	 * 
+	 * }
+	 */
 
-	public void removeDemandOfTheAtendee(Demand demand) {
-		this.demandService.delete(demand);
-	}
-
-	public void finalizeDemandAtTheNextTick(String name) {
+	public void finalizeDemandAtTheNextTick(String name) { // finalize a demanda no proximo tick
 		if (isNull(demandsToBeFinalized))
 			demandsToBeFinalized = new ArrayList<>();
 
 		Demand demand = this.demandService.getDemandByName(name);
-		demandsToBeFinalized.add(demand);
+		this.demandsToBeFinalized.add(demand);
 	}
 
 	private void finalizeDemand() {
@@ -120,6 +127,13 @@ public class AgencyService {
 	public String getManager() {
 		return this.manager;
 	}
+	public int getQuantum() {
+		return quantum;
+	}
+
+	public void setQuantum(int quantum) {
+		this.quantum = quantum;
+	}
 
 	public DemandService getDemandService() {
 		return demandService;
@@ -141,7 +155,7 @@ public class AgencyService {
 		List<Atendee> listOfTheAteendes = atendeeService.getAll();
 		List<Demand> listOfTheDemands = demandService.getAllUnallocated();
 
-		return "Atendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
+		return "Quantum: " + getQuantum() +"\nAtendees: " + listOfTheAteendes + "\n" + "Queue: " + listOfTheDemands;
 	}
 
 	public void setLogger(Logger logger) {
@@ -151,4 +165,5 @@ public class AgencyService {
 	public Logger getLogger() {
 		return logger;
 	}
+
 }
