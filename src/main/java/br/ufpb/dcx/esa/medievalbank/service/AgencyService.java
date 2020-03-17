@@ -41,8 +41,8 @@ public class AgencyService {
 		try {
 			command.execute();
 		} catch (Exception e) {
-			e.printStackTrace();
 			this.logger.error(String.format("Error executing %s, exception message was %s", command.getDescription(), e.getMessage()));
+			throw e;
 		}
 		this.logger.trace(String.format("Executed %s", command.getDescription()));
 	}
