@@ -62,13 +62,13 @@ public class AtendeeService {
 			if (!(oldAtendee.getName().equals(atendee.getName()))) {
 				validateDuplicatedName(atendee);
 			}
-		}
+	}
 
 		return repository.save(atendee);
 
 	}
 
-	private void nullSafeEquals(Object obj1, Object obj2, String message) {
+	public void nullSafeEquals(Object obj1, Object obj2, String message) {
 		if (obj1 == null) {
 			if (obj2 != null) {
 				throw new MedievalBankException(message);
@@ -98,13 +98,13 @@ public class AtendeeService {
 		return repository.findByNameContaining(name);
 	}
 
-	private void validateDuplicatedName(Atendee atendee) {
+	public void validateDuplicatedName(Atendee atendee) {
 		if (repository.existsByName(atendee.getName())) {
 			throw new MedievalBankException("Atendee name cannot be duplicated");
 		}
 	}
 
-	private void validateEmail(Atendee atendee) {
+	public void validateEmail(Atendee atendee) {
 		if (atendee.getEmail() != null) {
 			if (!matchersRegex(atendee.getEmail())) {
 				throw new MedievalBankException("Atendee e-mail format is invalid");
