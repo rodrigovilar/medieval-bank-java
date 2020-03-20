@@ -4,12 +4,11 @@ import org.junit.Test;
 
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
 
-public class DemandServiceTestHelper {
+public class DemandTempoFixoServiceTestHelper {
 	@Test
-	public static Demand createDemand(DemandService service, String aName) {
+	public static void t1_decreaseDemands(DemandService service, String aName) {
 		Demand demand = new Demand();
 		demand.setName(aName);
-		return service.create(demand);
+		service.create(demand);
 	}
-	
 }

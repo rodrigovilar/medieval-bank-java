@@ -13,8 +13,8 @@ import br.ufpb.dcx.esa.medievalbank.repository.DemandRepository;
 public class DemandService {
 
 	@Autowired
-	private DemandRepository repository;
-
+	protected DemandRepository repository;
+	
 	public Demand create(Demand demand) {
 
 		return repository.save(demand);
@@ -27,7 +27,7 @@ public class DemandService {
 	public List<Demand> getAllUnallocated() {
 		return this.repository.findByAllocatedFalse();
 	}
-
+	
 	public void delete(Demand demand) {
 		repository.delete(demand);
 	}
@@ -37,7 +37,7 @@ public class DemandService {
 		return repository.save(demand);
 	}
 
-	private void validadeDemand(Demand demand) throws MedievalBankException {
+	public void validadeDemand(Demand demand) throws MedievalBankException {
 		if (demand.getId() == null) {
 			throw new MedievalBankException("Demand with null id");
 		}

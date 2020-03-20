@@ -29,6 +29,8 @@ public class Demand implements Serializable {
 
 	@OneToOne(mappedBy = "demand")
 	private Atendee atendee;
+	
+	
 
 	public Demand() {
 
