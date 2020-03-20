@@ -10,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
-import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
-import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import br.ufpb.dcx.esa.medievalbank.utils.logging.LoggingMock;
 
 @Service
@@ -29,19 +27,28 @@ public class AgencyService {
 
 	@Autowired
 	private DemandService demandService;
-
+	
+	@Autowired
+	private UserService userService;
+	
 	private Logger logger = new LoggingMock();
 
-	public void execute(Command command){
+	public Object execute(Command command){
 		command.setAgencyService(this);
+		Object result = null;
 		this.logger.trace(String.format("Executing %s", command.getDescription()));
 		try {
-			command.execute();
+			 result = command.execute();
 		} catch (Exception e) {
 			this.logger.error(String.format("Error executing %s, exception message was %s", command.getDescription(), e.getMessage()));
 			throw e;
 		}
 		this.logger.trace(String.format("Executed %s", command.getDescription()));
+		return result;
+	}
+	
+	public List<Object> getRoles() {
+		return userService.getRoles();
 	}
 
 	@Secured("ROLE_SYSTEM")

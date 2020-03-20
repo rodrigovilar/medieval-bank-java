@@ -6,8 +6,6 @@ import br.ufpb.dcx.esa.medievalbank.command.InsertAttendee;
 import br.ufpb.dcx.esa.medievalbank.command.RemoveAttendee;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.service.AgencyService;
-import br.ufpb.dcx.esa.medievalbank.service.AtendeeService;
-import br.ufpb.dcx.esa.medievalbank.service.DemandService;
 import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import br.ufpb.dcx.esa.medievalbank.utils.logging.LoggingMock;
 import org.junit.Before;
@@ -19,9 +17,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
