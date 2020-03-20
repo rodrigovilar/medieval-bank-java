@@ -20,7 +20,7 @@ public class DemandTempoFixoService extends DemandService{
 		repository.delete(demand);
 	}
 	
-	public List<Demand> getAllUnallocated() {
-		return this.repository.findByAllocatedFalse();
+	public List<DemandTempoFixo> getAllDemandUnallocated() {
+		return this.repository.findByAllUnallocated();
 	}
 }
