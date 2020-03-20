@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.ufpb.dcx.esa.medievalbank.model.Demand;
 import br.ufpb.dcx.esa.medievalbank.model.DemandTempoFixo;
 import br.ufpb.dcx.esa.medievalbank.repository.DemandTempoFixoRepository;
 
