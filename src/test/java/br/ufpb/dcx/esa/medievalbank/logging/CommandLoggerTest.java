@@ -128,7 +128,16 @@ public class CommandLoggerTest {
     @Transactional
     @WithMockUser(username = "john", roles = { "MANAGER" })
     public void t055_RemoveAttendeeAndLogExceptions() {
+        try {
+            removeSingleAttendee(new Atendee(), false);
+            fail("Should throw exception");
+        } catch (Exception e) {
 
+        }
+
+        String errorLog = "ERROR: Error executing remove attendee, exception message was Atendee id not found: 0";
+        System.out.println(this.logger.getLogs());
+        assertTrue(isLogInLogs(errorLog));
     }
 
 }
