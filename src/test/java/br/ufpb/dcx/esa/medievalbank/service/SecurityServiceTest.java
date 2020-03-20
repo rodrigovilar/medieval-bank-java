@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.ufpb.dcx.esa.medievalbank.MedievalBankException;
 import br.ufpb.dcx.esa.medievalbank.command.Command;
 import br.ufpb.dcx.esa.medievalbank.command.InsertAttendee;
+import br.ufpb.dcx.esa.medievalbank.command.RemoveAttendee;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 
 @RunWith(SpringRunner.class)
@@ -32,11 +33,24 @@ public class SecurityServiceTest {
         return atendee;
     }
 	
-	public void tryinsertAttendeeWithError(AgencyService service, Atendee atendee, String failMessage,
+	public void tryInsertAtendeeWithoutPermission(AgencyService service, Atendee atendee, String failMessage,
 			String expectedExceptionMessage) {
 		try {
 			Command insertAttendee = new InsertAttendee(atendee);
 			service.execute(insertAttendee);
+			fail(failMessage);
+		} catch (MedievalBankException e) {
+			assertEquals(expectedExceptionMessage, e.getMessage());
+		}
+	}
+	
+	public void tryRemoveAtendeeWithoutPermission(AgencyService service, Atendee atendee, String failMessage,
+			String expectedExceptionMessage) {
+		try {
+			Command insertAttendee = new InsertAttendee(atendee);
+			Atendee response = (Atendee) service.execute(insertAttendee);
+			Command removeAttendee = new RemoveAttendee(response);
+			service.execute(removeAttendee);
 			fail(failMessage);
 		} catch (MedievalBankException e) {
 			assertEquals(expectedExceptionMessage, e.getMessage());
@@ -60,7 +74,29 @@ public class SecurityServiceTest {
 		Atendee atendee = builAttendee("A1", "a@gmail.com");
 		String failMessage = "Test failed because the system accepted insert attendee without permission";
 		String expectedExceptionMessage = "User is not allowed";
-		tryinsertAttendeeWithError(agencyService, atendee, failMessage, expectedExceptionMessage);
+		tryInsertAtendeeWithoutPermission(agencyService, atendee, failMessage, expectedExceptionMessage);
+	}
+	
+	@Test
+	@WithMockUser(username = "john", roles = { "MANAGER" })
+	@Transactional
+	public void succesfullyRemoveAttendeeWithPermission() {
+		Atendee atendee = builAttendee("A1", "a@gmail.com");
+		Command insertAttendee = new InsertAttendee(atendee);
+		Atendee response = (Atendee) agencyService.execute(insertAttendee);
+		Command removeAttendee = new RemoveAttendee(response);
+		Atendee deletedAttendee = (Atendee) agencyService.execute(removeAttendee);
+		assertEquals(deletedAttendee, null);
+	}
+	
+	@Test
+	@WithMockUser(username = "john", roles = { "SYSTEM" })
+	@Transactional
+	public void exceptionRemoveAttendeeWithoutPermission() {
+		Atendee atendee = builAttendee("A1", "a@gmail.com");
+		String failMessage = "Test failed because the system accepted remove attendee without permission";
+		String expectedExceptionMessage = "User is not allowed";
+		tryRemoveAtendeeWithoutPermission(agencyService, atendee, failMessage, expectedExceptionMessage);
 	}
 	
 
