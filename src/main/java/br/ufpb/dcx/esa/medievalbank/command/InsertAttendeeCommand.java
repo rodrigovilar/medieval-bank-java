@@ -2,11 +2,11 @@ package br.ufpb.dcx.esa.medievalbank.command;
 
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 
-public class InsertAttendee extends Command {
+public class InsertAttendeeCommand extends Command {
 
     private Atendee attendee;
 
-    public InsertAttendee(Atendee attendee) {
+    public InsertAttendeeCommand(Atendee attendee) {
         this.attendee = attendee;
     }
 

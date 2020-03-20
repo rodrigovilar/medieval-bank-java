@@ -3,10 +3,10 @@ package br.ufpb.dcx.esa.medievalbank.command;
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
 import br.ufpb.dcx.esa.medievalbank.service.DemandService;
 
-public class InsertDemand extends Command {
+public class InsertDemandCommand extends Command {
     private Demand demand;
 
-    public InsertDemand(Demand demand) {
+    public InsertDemandCommand(Demand demand) {
         this.demand = demand;
     }
 

@@ -3,11 +3,11 @@ package br.ufpb.dcx.esa.medievalbank.command;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.service.AtendeeService;
 
-public class RemoveAttendee extends Command {
+public class RemoveAttendeeCommand extends Command {
 
     Atendee attendee;
 
-    public RemoveAttendee(Atendee attendee) {
+    public RemoveAttendeeCommand(Atendee attendee) {
         this.attendee = attendee;
     }
 

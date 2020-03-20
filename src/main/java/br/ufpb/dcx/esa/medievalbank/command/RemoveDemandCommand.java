@@ -3,10 +3,10 @@ package br.ufpb.dcx.esa.medievalbank.command;
 import br.ufpb.dcx.esa.medievalbank.model.Demand;
 import br.ufpb.dcx.esa.medievalbank.service.DemandService;
 
-public class RemoveDemand extends Command {
+public class RemoveDemandCommand extends Command {
     private  Demand demand;
 
-    public RemoveDemand(Demand demand) {
+    public RemoveDemandCommand(Demand demand) {
         this.demand = demand;
     }
 
