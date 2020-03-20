@@ -2,12 +2,10 @@ package br.ufpb.dcx.esa.medievalbank.logging;
 
 
 import br.ufpb.dcx.esa.medievalbank.command.Command;
-import br.ufpb.dcx.esa.medievalbank.command.InsertAttendee;
-import br.ufpb.dcx.esa.medievalbank.command.RemoveAttendee;
+import br.ufpb.dcx.esa.medievalbank.command.InsertAttendeeCommand;
+import br.ufpb.dcx.esa.medievalbank.command.RemoveAttendeeCommand;
 import br.ufpb.dcx.esa.medievalbank.model.Atendee;
 import br.ufpb.dcx.esa.medievalbank.service.AgencyService;
-import br.ufpb.dcx.esa.medievalbank.service.AtendeeService;
-import br.ufpb.dcx.esa.medievalbank.service.DemandService;
 import br.ufpb.dcx.esa.medievalbank.utils.logging.Logger;
 import br.ufpb.dcx.esa.medievalbank.utils.logging.LoggingMock;
 import org.junit.Before;
@@ -19,9 +17,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -50,7 +45,7 @@ public class CommandLoggerTest {
     }
 
     public Atendee insertSingleAttendee(Atendee attendee, boolean shouldFail) {
-        Command insertAttendee = new InsertAttendee(attendee);
+        Command insertAttendee = new InsertAttendeeCommand(attendee);
         try {
             this.agencyService.execute(insertAttendee);
         } catch (Exception e) {
@@ -60,7 +55,7 @@ public class CommandLoggerTest {
     }
 
     private void removeSingleAttendee(Atendee att, boolean shouldFail) {
-        Command removeAttendee = new RemoveAttendee(att);
+        Command removeAttendee = new RemoveAttendeeCommand(att);
         try {
             this.agencyService.execute(removeAttendee);
         } catch (Exception e) {
